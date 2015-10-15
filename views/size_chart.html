@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Kiosko.net</title>
+	<script type="text/javascript" src="../js/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/scripts/scripts.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery-ui.min.js"></script>
+	
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/style.css" rel="stylesheet">
+	<link href="../css/toastr.min.css" rel="stylesheet">
+</head>
+<body class="bg">
+	<div class="container">
+		<header class="row">
+			<figure class="col-xs-2">
+				<img src="../public/images/frame/logo.jpg" class="logoCompany">
+			</figure>
+			<div class="col-xs-4">
+				<div class="nameCompany"></div>
+			</div>
+			<div class="col-xs-6">
+				<ol class="list-inline navbar-right">
+					<li class="col-xs-6 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
+						<div class="iconOption"> <img src="../img/iconMail.svg" class="imgIcon"></div>	
+						<div class="lblOption">Submit</div>			
+					</li>
+					<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
+								<div class="modal-header">
+									<h2 class="modal-title modalTitle text-center">
+										Please, write your email
+									</h2>
+								</div>
+								<div class="modal-body">
+									<div class="input-group">
+										<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
+										<span class="lblMessageOtherDomain">Complete your email here</span>
+  										<span class="input-group-btn areaDomain">
+  											<span class="lblArroba">@</span>
+  											<select id="selectDomain">
+  												<option >realcs.com</option>
+												<option>hotmail.com</option>
+												<option>outlook.com</option>
+												<option>gmail.com</option>
+												<option val="other">Other</option>											
+											</select>
+  										</span>
+									</div>									
+								</div>
+								<div class="modal-footer">																
+									<button type="button" class="btn" id="submitClientEmail">
+										Send
+									</button>
+									<button type="button" class="btn" id="cancelClientEmail">
+										Cancel
+									</button>
+								</div>
+							</div>							
+						</div>						
+					</div>
+					<li class="col-xs-6 text-center btnHome">
+						<div class="iconOption"> <img src="../img/iconHome.svg" class="imgIcon"></div>
+						<div class="lblOption">Home</div>
+					</li>
+				</ol>			
+			</div>
+		</header>
+	</div>
+
+	<div class="sectionSock ">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<h1 id="lblSizeChart">Size Chart</h1>
+				</div>
+			</div>	
+		</div>	
+	</div>
+
+	<div class="sectionSock blueSock">
+		<section>
+
+			<div class="tabbable" id="tabs-sizes">
+				<div class="col-xs-10 col-xs-offset-1">
+					<ul class="nav nav-tabs nav-justified ">
+						<li class="active">
+							<a href="#panel-ladies" data-toggle="tab">Ladies</a>
+						</li>
+						<li>
+							<a href="#panel-mens" data-toggle="tab">Mens</a>
+						</li>
+						<li>
+							<a href="#panel-girls" data-toggle="tab">Girls</a>
+						</li>
+						<li>
+							<a href="#panel-boys" data-toggle="tab">Boys</a>
+						</li>
+					</ul>
+				</div>
+			</div>	
+			<div class="sizesFields">
+				<div class="col-xs-10 col-xs-offset-1">
+					<div class="tab-content">
+						<div class="tab-pane active" id="panel-ladies">
+							<table class="table table-bordered">	
+								<thead>
+									<tr>
+										<th>British</th><th>European</th><th>American</th><th>Japanese</th>
+									</tr>
+								</thead>								
+								<tbody>
+									<tr>
+										<td>2</td><td>43</td><td>4.5</td><td>21.5</td>
+									</tr>
+									<tr>
+										<td>2.5</td><td>35</td><td>5</td><td>22</td>
+									</tr>
+									<tr>
+										<td>3</td><td>35.5</td><td>5.5</td><td>22.5</td>
+									</tr>
+									<tr>
+										<td>3.5</td><td>36</td><td>6</td><td>23</td>
+									</tr>
+									<tr>
+										<td>4</td><td>37.5</td><td>6.5</td><td>23</td>
+									</tr>
+									<tr>
+										<td>4.5</td><td>37.5</td><td>7</td><td>24</td>
+									</tr>
+									<tr>
+										<td>5</td><td>38</td><td>7.5</td><td>23.5</td>
+									</tr>
+									<tr>
+										<td>5.5</td><td>38.5</td><td>8</td><td>24.5</td>
+									</tr>
+									<tr>
+										<td>6</td><td>39</td><td>8.5</td><td>25</td>
+									</tr>
+									<tr>
+										<td>6.5</td><td>39.5</td><td>9</td><td>25.5</td>
+									</tr>
+									<tr>
+										<td>7</td><td>40</td><td>9.5</td><td>25.5</td>
+									</tr>
+									<tr>
+										<td>7.5</td><td>41</td><td>10</td><td>26</td>
+									</tr>
+									<tr>
+										<td>8</td><td>42</td><td>10.5</td><td>26</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tab-pane" id="panel-mens">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>British</th><th>European</th><th>American</th><th>Japanese</th>
+									</tr>
+								</thead>									
+								<tbody>
+									<tr>
+										<td>5</td><td>38</td><td>5.5</td><td>23.5</td>
+									</tr>
+									<tr>
+										<td>5.5</td><td>38.7</td><td>6</td><td>24</td>
+									</tr>
+									<tr>
+										<td>6</td><td>39.3</td><td>6.5</td><td>24.5</td>
+									</tr>
+									<tr>
+										<td>6.5</td><td>40</td><td>7</td><td>25</td>
+									</tr>
+									<tr>
+										<td>7</td><td>40.5</td><td>7.5</td><td>25.5</td>
+									</tr>
+									<tr>
+										<td>7.5</td><td>41</td><td>8</td><td>26</td>
+									</tr>
+									<tr>
+										<td>8</td><td>42</td><td>8.5</td><td>26.5</td>
+									</tr>
+									<tr>
+										<td>8.5</td><td>42.5</td><td>9</td><td>27</td>
+									</tr>
+									<tr>
+										<td>9</td><td>43</td><td>9</td><td>27.5</td>
+									</tr>
+									<tr>
+										<td>9.5</td><td>44</td><td>10</td><td>28</td>
+									</tr>
+									<tr>
+										<td>10</td><td>44.5</td><td>10.5</td><td>28.5</td>
+									</tr>
+									<tr>
+										<td>10.5</td><td>45</td><td>11</td><td>29</td>
+									</tr>
+									<tr>
+										<td>11</td><td>46</td><td>11.5</td><td>29.5</td>
+									</tr>
+									<tr>
+										<td>11.5</td><td>46.5</td><td>12</td><td>30</td>
+									</tr>
+									<tr>
+										<td>12</td><td>47</td><td>12.5</td><td>30.5</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tab-pane" id="panel-girls">
+							<table class="table table-bordered">	
+								<thead>
+									<tr>
+										<th>British</th><th>European</th><th>American</th><th>Japanese</th>
+									</tr>
+								</thead>								
+								<tbody>
+									<tr>
+										<td>8</td><td>26</td><td>8.5</td><td>14.5</td>
+									</tr>
+									<tr>
+										<td>8.5</td><td>26.5</td><td>9</td><td>15</td>
+									</tr>
+									<tr>
+										<td>9</td><td>27</td><td>9.5</td><td>15.5</td>
+									</tr>
+									<tr>
+										<td>9.5</td><td>27.5</td><td>10</td><td>16</td>
+									</tr>
+									<tr>
+										<td>10</td><td>28</td><td>10.5</td><td>16.5</td>
+									</tr>
+									<tr>
+										<td>10.5</td><td>28.5</td><td>11</td><td>17</td>
+									</tr>
+									<tr>
+										<td>11</td><td>29</td><td>11.5</td><td>17.5</td>
+									</tr>
+									<tr>
+										<td>11.5</td><td>30</td><td>12</td><td>18</td>
+									</tr>
+									<tr>
+										<td>12</td><td>30.5</td><td>12.5</td><td>18.5</td>
+									</tr>
+									<tr>
+										<td>12.5</td><td>31</td><td>13</td><td>19</td>
+									</tr>
+									<tr>
+										<td>13</td><td>31.5</td><td>13.5</td><td>19.5</td>
+									</tr>
+									<tr>
+										<td>13.5</td><td>32.2</td><td>1</td><td>20</td>
+									</tr>
+									<tr>
+										<td>1</td><td>33</td><td>1.5</td><td>20.5</td>
+									</tr>
+									<tr>
+										<td>1.5</td><td>33.5</td><td>2</td><td>21</td>
+									</tr>
+									<tr>
+										<td>2</td><td>34</td><td>2.5</td><td>21.5</td>
+									</tr>
+									<tr>
+										<td>2.5</td><td>35</td><td>3</td><td>22</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tab-pane" id="panel-boys">
+							<table class="table table-bordered">	
+								<thead>
+									<tr>
+										<th>British</th><th>European</th><th>American</th><th>Japanese</th>
+									</tr>
+								</thead>								
+								<tbody>
+									<tr>
+										<td>11</td><td>29</td><td>11.5</td><td>16.5</td>
+									</tr>
+									<tr>
+										<td>11.5</td><td>29.7</td><td>12</td><td>17</td>
+									</tr>
+									<tr>
+										<td>12</td><td>30.5</td><td>12.5</td><td>17.5</td>
+									</tr>
+									<tr>
+										<td>12.5</td><td>31</td><td>13</td><td>18</td>
+									</tr>
+									<tr>
+										<td>13</td><td>31.5</td><td>13.5</td><td>18.5</td>
+									</tr>
+									<tr>
+										<td>13.5</td><td>33</td><td>1</td><td>19</td>
+									</tr>
+									<tr>
+										<td>1</td><td>33.5</td><td>1.5</td><td>19.5</td>
+									</tr>
+									<tr>
+										<td>1.5</td><td>34</td><td>2</td><td>20</td>
+									</tr>
+									<tr>
+										<td>2</td><td>34.7</td><td>2.5</td><td>20.5</td>
+									</tr>
+									<tr>
+										<td>2.5</td><td>35</td><td>3</td><td>21</td>
+									</tr>
+									<tr>
+										<td>3</td><td>35.5</td><td>3.5</td><td>21.5</td>
+									</tr>
+									<tr>
+										<td>3.5</td><td>36</td><td>4</td><td>22</td>
+									</tr>
+									<tr>
+										<td>4</td><td>37</td><td>4.5</td><td>22.5</td>
+									</tr>
+									<tr>
+										<td>4.5</td><td>37.5</td><td>5</td><td>23</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>	
+			</div>
+					
+		</section>
+	</div>
+
+	<div class="container">
+		<footer class="row">
+			<div class="navbar-fixed-bottom redSock">
+				<div class="col-xs-12 text-center btnSizeChart btn noContent" onclick="history.back(-1);">
+					<div class="iconOption"><img src="../img/iconReturn.svg" class="imgIcon"></div>
+					<div class="lblOption">Return</div>
+				</div>				
+			</div>			
+		</footer>
+	</div>
+
+</body>
+</html>

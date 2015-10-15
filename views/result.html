@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Kiosko.net</title>
+	<script type="text/javascript" src="../js/plugins/jquery.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../js/scripts/scripts.js"></script>
+	<script type="text/javascript" src="../js/scripts/result.js"></script>
+	<script type="text/javascript" src="../js/plugins/toastr.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery.zoom.js"></script>
+	
+	<link href="../css/bootstrap.min.css" rel="stylesheet">
+	<link href="../css/style.css" rel="stylesheet">
+	<link href="../css/toastr.min.css" rel="stylesheet">
+</head>
+<body class="bg">
+	<div class="container">
+		<header class="row">
+			<figure class="col-xs-2">
+				<img src="../public/images/frame/logo.jpg" class="logoCompany">
+			</figure>
+			<div class="col-xs-4">
+				<div class="nameCompany"></div>
+			</div>
+			<div class="col-xs-6">
+				<ol class="list-inline navbar-right">
+					<li class="col-xs-6 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
+						<div class="iconOption"> <img src="../img/iconMail.svg" class="imgIcon"></div>	
+						<div class="lblOption">Submit</div>			
+					</li>
+					<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
+								<div class="modal-header">
+									<h2 class="modal-title modalTitle text-center">
+										Please, write your email
+									</h2>
+								</div>
+								<div class="modal-body">
+									<div class="input-group">
+										<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
+										<span class="lblMessageOtherDomain">Complete your email here</span>
+  										<span class="input-group-btn areaDomain">
+  											<span class="lblArroba">@</span>
+  											<select id="selectDomain">
+  												<option >realcs.com</option>
+												<option>hotmail.com</option>
+												<option>outlook.com</option>
+												<option>gmail.com</option>
+												<option val="other">Other</option>											
+											</select>
+  										</span>
+									</div>									
+								</div>
+								<div class="modal-footer">																
+									<button type="button" class="btn" id="submitClientEmail">
+										Send
+									</button>
+									<button type="button" class="btn" id="cancelClientEmail">
+										Cancel
+									</button>
+								</div>
+							</div>							
+						</div>						
+					</div>
+					<li class="col-xs-6 text-center btnHome">
+						<div class="iconOption"> <img src="../img/iconHome.svg" class="imgIcon"></div>
+						<div class="lblOption">Home</div>
+					</li>
+				</ol>			
+			</div>
+		</header>
+	</div>
+
+	<div class="sectionSock blueSock">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<h1 class="shortDescription"></h1>
+				</div>
+			</div>	
+			<div class="row productBaseView" >
+				<section class="col-xs-6">
+
+					<div class="productDescription">
+
+						<div class="col-xs-6 lblStyle">Style:</div>
+						<div class="col-xs-6 txtStyle" id="txtStyle"></div>
+
+						<div class="col-xs-6 lblStyle">Price:</div>
+						<div class="col-xs-6 txtStyle" id="txtPrice"></div>
+
+						<div class="col-xs-6 lblStyle">Availability:</div>
+						<div class="col-xs-6 txtStyle" id="txtStock">In Stock</div>
+
+						<div class="col-xs-6 lblStyle">Units:</div>
+						<div class="col-xs-6 txtStyle" id="txtUnits">45</div>
+
+						<div class="col-xs-6 lblStyle">Color:</div>
+						<div class="col-xs-6 txtStyle" id="txtColor">Grey</div>
+
+						<div class="col-xs-6 lblStyle">Size:</div>
+						<div class="col-xs-6 txtStyle" id="txtSize">XL</div>
+
+					</div>
+
+				</section>
+				<div class="col-xs-6">
+					<span class='zoom' id='zoomImage'>
+						<img src="../public/images/base/1.jpg" alt="Image Product">
+					</span>
+				</div>
+			</div>
+		</div>	
+	</div>
+
+	<div class="sectionSock blueLightSock">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<section class="carousel slide" id="myCarousel">
+			          <div class="carousel-inner">
+			                <div class="item active">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_1.jpg" class="img-responsive" alt="Image View 1"></a></div>
+			                </div>
+			                <div class="item">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_2.jpg" class="img-responsive" alt="Image View 2"></a></div>
+			                </div>
+			                <div class="item">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_3.jpg" class="img-responsive" alt="Image View 3"></a></div>
+			                </div>
+			                <div class="item">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_4.jpg" class="img-responsive" alt="Image View 4"></a></div>
+			                </div>
+			                <div class="item">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_1.jpg" class="img-responsive" alt="Image View 5"></a></div>
+			                </div>
+			                <div class="item">
+			                  <div class="col-xs-4">
+			                  <a href="#"><img src="../public/images/small/1_2.jpg" class="img-responsive" alt="Image View 6"></a></div>
+			                </div>
+			          </section>
+			          <a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+			          <a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+			        </div>			        
+				</div>
+			</div>	
+		</div>	
+	</div>
+
+	<div class="sectionSock greenSock">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<h1 id="relatedItemsTitle">Retaled items avaliable in store</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<section class="row productsRelated">
+						<div class="col-xs-4">
+							<div class="thumbnail" id="relatedItem1">
+								<img class="relatedProductImage" src="../public/images/small/2_1.jpg" />
+								<span class="sku1 hide">SKU</span> <span class="size1 hide">Size</span>
+								<div class="caption">									
+									<p>
+										
+									</p>
+									<p>
+										$0.00
+									</p>
+									<p class="text-center">
+										<a class="btn btnBlue" href="#" id="linkRelated1">View product</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="thumbnail" id="relatedItem2">
+								<img class="relatedProductImage" src="../public/images/small/3_1.jpg" />
+								<span class="sku2 hide">SKU</span> <span class="size2 hide">Size</span>
+								<div class="caption">									
+									<p>
+										
+									</p>
+									<p>
+										$0.00
+									</p>
+									<p class="text-center">
+										<a class="btn btnBlue" href="#" id="linkRelated2">View product</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<div class="thumbnail" id="relatedItem3">
+								<img class="relatedProductImage" src="../public/images/small/4_1.jpg" />
+								<span class="sku3 hide">SKU</span> <span class="size3 hide">Size</span>
+								<div class="caption">									
+									<p>
+										
+									</p>
+									<p>
+										$0.00
+									</p> 
+									<p class="text-center">
+										<a class="btn btnBlue" href="#" id="linkRelated3">View product</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>	
+	</div>	
+
+	<div class="container">
+		<footer class="row">
+			<div class="navbar-fixed-bottom redSock">
+				<div class="col-xs-4 text-center btnReturn btn noContent" >
+					<div class="iconOption"><img src="../img/iconReturn.svg" class="imgIcon"></div>
+					<div class="lblOption">Return</div>
+				</div>
+				<div class="col-xs-4 text-center btnScanProduct btn noContent" onclick="location.href = '../index.html'">
+					<div class="iconOption"><img src="../img/iconScanProduct.svg" class="imgIcon"></div>
+					<div class="lblOption">Scan Product</div>
+				</div>
+				<div class="col-xs-4 text-center btnCheckLocals btn noContent">
+					<div class="iconOption"><img src="../img/iconHome.svg" class="imgIcon"></div>
+					<div class="lblOption">Check Other Stores</div>
+				</div>
+			</div>			
+		</footer>
+	</div>
+
+</body>
+</html>
