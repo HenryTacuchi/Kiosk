@@ -6,7 +6,7 @@ $(document).ready(function(){
 	init();
 		$.ajax({
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service1.svc/GetSKUInfo/"+qsParm["sku"]+"/"+qsParm["size"]+"/"+qsParm["store"],
+          url: "http://192.168.1.135/KioskoServices/Service.svc/GetSKUInfo/"+qsParm["sku"]+"/"+qsParm["size"]+"/"+qsParm["store"],
           async: false,
           dataType: "json",
           crossdomain: true,
@@ -33,22 +33,28 @@ $(document).ready(function(){
 
           		$.ajax({
 		            type: "GET",
-		            url: "http://192.168.1.135/KioskoServices/Service1.svc/GetRelatedProduct/"+qsParm["sku"]+"/"+qsParm["store"],
+		            url: "http://192.168.1.135/KioskoServices/Service.svc/GetRelatedProduct/"+qsParm["sku"]+"/"+qsParm["store"],
 		            async: false,
 		            dataType: "json",
 		            crossdomain: true,
 		            success:function(relatedProducts){
 		            	var relatedProducts = relatedProducts.GetRelatedProductResult;
-		            	$.each(relatedProducts, function( index, item) {
-		            		var i=index+1;
-		            		$("#relatedItem"+i+" p:first-child").text(item.Descr);
-		            		var price= (parseFloat(item.RetailPrice)).toFixed(2);
-		            		$("#relatedItem"+i+" p:nth-child(2)").text(price);
-		            		$(".sku"+i).text(item.SKU);
-		            		$(".size"+i).text(item.SizeCode);
-		            		$("#linkRelated"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);
+		            	if(relatedProducts.length>0){
+			            	$.each(relatedProducts, function( index, item) {
+			            		var i=index+1;
+			            		$("#relatedItem"+i+" p:first-child").text(item.Descr);
+			            		var price= (parseFloat(item.RetailPrice)).toFixed(2);
+			            		$("#relatedItem"+i+" p:nth-child(2)").text(price);
+			            		$(".sku"+i).text(item.SKU);
+			            		$(".size"+i).text(item.SizeCode);
+			            		$("#linkRelated"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);
 
-          				});
+	          				});
+			            }
+			            else{
+			            	$(".productsRelated").hide();
+			            	$(".messageResultProducts").show();
+			            }
 
           			},
           			error: function(error) {
@@ -68,13 +74,32 @@ $(document).ready(function(){
 		window.location = "store_list.html?sku="+qsParm["sku"]+"&store="+qsParm["store"];
 	});
 
+	$(".btnHome").click(function(){
+			localStorage.flag=1;
+		 	window.location = "../index.html";
+	});
+
 	$(".btnReturn").click(function(){
-		var a = document.referrer ;
-		if (a=="file://192.168.1.154/Web%20Design/KIOSKO.NET/index.html"){
-			alert("lets go home");
+		var currentPage = location.href;
+		var rowid, count;
+		if (afterHomePage==currentPage){
+		localStorage.flag=2;		
 		}
 		window.history.back();
+		
 	});
+	
+  $(".btnScanProduct").click(function(){
+    localStorage.flag=2;
+    var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+      db.transaction(function (tx) {  
+        tx.executeSql("DELETE FROM ProductSearched",[],function(tx,success){
+           window.location = "../index.html";
+        },null);
+      });
+   
+  });
+
 
 	$(".relatedProductImage").click(function(){
 		this
@@ -132,20 +157,21 @@ $(document).ready(function(){
 	 	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 	 	var currentPage = location.href;
 		db.transaction(function (tx) {  
-			tx.executeSql("INSERT INTO History (Url) VALUES ('?')",[currentPage],function(tx,success){},function(tx,e){}); 
+			tx.executeSql("INSERT INTO History (Url) VALUES (?)",[currentPage],function(tx,success){},function(tx,e){}); 
 		});
 		db.transaction(function (tx) {
 		   	tx.executeSql("SELECT * FROM History", [], function (tx, results) {
-		      afterHomePage = results.rows.item(1);
-
-
+		      afterHomePage = results.rows.item(1).Url;
+			},null);
+		});	
 
 	}
+
 	function submitEmail(email){
 
 		$.ajax({
             type: "GET",
-            url: "http://192.168.1.135/KioskoServices/Service1.svc/SubmitEmail/"+email,
+            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmail/"+email,
             async: false,
             dataType: "json",
             crossdomain: true,

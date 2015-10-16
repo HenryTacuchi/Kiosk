@@ -1,7 +1,8 @@
 $(document).ready(function(){
 	
- var StoreNo,BackgroundImage,LogoImage,HomeImage;
+  var storeNo,backgroundImage,logoImage,homeImage;
 	
+	checkModal();
 	$("#homeScreen").click(function(){
 	  init();
 	});  
@@ -15,7 +16,7 @@ $(document).ready(function(){
 			var sku= $("#skuCode").val();
 			 $.ajax({
               type: "GET",
-              url: "http://192.168.1.135/KioskoServices/Service1.svc/LoadSizes/"+sku,
+              url: "http://192.168.1.135/KioskoServices/Service.svc/LoadSizes/"+sku,
               async: false,
               dataType: "json",
               crossdomain: true,
@@ -34,14 +35,16 @@ $(document).ready(function(){
 	              	options.val(selected);
                 }
                 else{
-                	toastr.info("Product not found");
+                	toastr.info("Product not found","",{timeOut:1000});
+                	$("#toast-container").effect("bounce");
                 }
               	//$("#animate").attr("src","file://192.168.1.154/Web%20Design/KIOSKO.NET/okey.gif");
               	//$("#paisana").attr("src","http://retailcs.com/paisana.jpg");
  						 	
      					},       					
 						  error: function(error) {
-					 	  	 toastr.error("Missing product information");
+					 	  	 toastr.error("Missing product information","",{timeOut:1000});
+					 	  	 $("#toast-container").effect("bounce");
 					    }	                
 	     });
 			
@@ -55,7 +58,10 @@ $(document).ready(function(){
 
 	});
 
-
+  $(".btnHome").click(function(){
+ 		 localStorage.flag=1;	
+     window.location = "index.html";
+  });
 	$(".btnContinue").click(function(){
 		var sku= $("#skuCode").val();
 		var size = $("#sizeOptions option:selected").text();
@@ -67,12 +73,12 @@ $(document).ready(function(){
 		   		tx.executeSql("DELETE FROM ProductSearched");
 			 	});
 			db.transaction(function (tx) {  
-		   		tx.executeSql("INSERT INTO ProductSearched (Sku) VALUES ('?')",[sku],
-		   			function(tx,success){ console.log(sku+" saved");  },
+		   		tx.executeSql("INSERT INTO ProductSearched (Sku) VALUES (?)",[sku],
+		   			function(tx,success){ console.log(sku+" saved"); window.location = "views/result.html?sku="+sku+"&size="+size+"&store="+storeNo;},
 		   			function(tx,e){ console.log(e);}
 					);
 		  });
-			window.location = "views/result.html?sku="+sku+"&size="+size+"&store="+StoreNo;
+			
 		}
 		else{
 				toastr.info("Make sure to complete all the entries","",{timeOut: 1000});
@@ -125,43 +131,12 @@ $(document).ready(function(){
 	  }
 	});
 
-	$("#saveConfig").click(function(){
-		var store= $("#storeNo").val();
-		
-		if(store.length!=0){
-
-			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
-			db.transaction(function (tx) {  
-		   		tx.executeSql("DELETE FROM KioskPreferences");
-			 	});
-			db.transaction(function (tx) {  
-		   		tx.executeSql("INSERT INTO KioskPreferences (StoreNo) VALUES ('?')",[store],
-		   			function(tx,success){ 
-		   				StoreNo=store;
-		   				toastr.success("Configuration set up successfully!","",{timeOut: 1000});
-							$("#toast-container").effect("slide","slow");
-							$("#modal-config").modal("hide");
-							$("#storeNo").focus();
-		   			},
-		   			function(tx,e){
-		   				toastr.error("Try again please!","",{timeOut: 1000});
-					 	  $("#toast-container").effect("bounce");
-		   			}
-					);
-
-			});
-		}
-		else {
-				toastr.info("Please write your store number!","",{timeOut: 1000});
-					 	  $("#toast-container").effect("bounce");
-		}
-	});
-
+	
 	function submitEmail(email){
 
 		$.ajax({
             type: "POST",
-            url: "http://192.168.1.135/KioskoServices/Service1.svc/SubmitEmailPost",
+            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmailPost",
             async: false,
             contentType: "application/json",
             data: JSON.stringify({"email": email}),
@@ -187,11 +162,55 @@ $(document).ready(function(){
 					});
 	}
 
+
+function checkModal(){
+	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+	db.readTransaction(function (tx) {
+			   	tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
+			      var count = results.rows.length;
+			      if(count>0){
+			      				      			
+			      			if(localStorage.flag>0){
+				      			
+							      if(localStorage.flag==2){
+							      		$("#homeScreen").hide();
+						      			db.readTransaction(function (tx) {
+								   				tx.executeSql("SELECT * FROM ProductSearched", [], function (tx, results) {
+								   						var count = results.rows.length;
+							      		      if(count>0){
+							      		     	 $("#skuCode").val(results.rows.item(0).Sku);
+							      		     	 var e = $.Event("keydown");
+   														 e.which = 13; 
+   														 $("#skuCode").trigger(e);
+   														 $("#skuCode").focus();
+							      		      }
+								   				},null);
+							   				});
+		      
+							      		init();
+							      		$("#skuCode").focus();
+							      }
+							      else{
+							      	$("#homeScreen").show();
+							      }
+							    }
+							    else{
+							    
+							    	$("#homeScreen").show();
+							    }
+					      		      					      	
+			      }
+			      else{
+			      		$("#homeScreen").show();
+			      }
+		}, function(){$("#homeScreen").show();});
+	});	   	
+}
 	function init(){
 			//Open and/or create structure
 			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 			db.transaction(function (tx) {  
-	   		tx.executeSql("CREATE TABLE IF NOT EXISTS KioskPreferences (BackgroundImage TEXT, StoreNo TEXT, LogoImage TEXT,	HomeImage TEXT)");
+	   		tx.executeSql("CREATE TABLE IF NOT EXISTS KioskPreferences (BackgroundImage TEXT, StoreNo INT, LogoImage TEXT,	HomeImage TEXT)");
 		 	});
 		 	db.transaction(function (tx) {  
 	   		tx.executeSql("CREATE TABLE IF NOT EXISTS ProductSearched(Sku TEXT)");
@@ -200,44 +219,63 @@ $(document).ready(function(){
 	   		tx.executeSql("CREATE TABLE IF NOT EXISTS History(Url TEXT)");
 		 	});
 		 	db.transaction(function (tx) {  
+	   		tx.executeSql("CREATE TABLE IF NOT EXISTS Security(Password TEXT)");
+		 	});
+		
+		 	db.transaction(function (tx) {  
 	   		tx.executeSql("DELETE FROM History");
+		 	});
+		 	db.transaction(function (tx) {  
+	   		tx.executeSql("DELETE FROM ProductSearched");
 		 	});
 		 	var currentPage = location.href;
 		 	db.transaction(function (tx) {  
-		   		tx.executeSql("INSERT INTO History (Url) VALUES ('?')",[currentPage],function(tx,success){},function(tx,e){}); 
-		   });
-
-
+		   		tx.executeSql("INSERT INTO History (Url) VALUES (?)",[currentPage],function(tx,success){},function(tx,e){}); 
+		  });
+		
 		 	//Retrive preferences
-		 	db.transaction(function (tx) {
+		 	db.readTransaction(function (tx) {
 		   	tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
 		      var count = results.rows.length;
 		      
 		      if(count>0){
-		      	StoreNo= results.rows.item(0).StoreNo;
-		      	BackgroundImage= results.rows.item(0).BackgroundImage;
-		      	HomeImage= results.rows.item(0).HomeImage;
-		      	LogoImage= results.rows.item(0).LogoImage;
+		      	storeNo= results.rows.item(0).StoreNo;
+		       	localStorage.flag = 1;
+
+		       	db.readTransaction(function (tx) {
+				   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+				      var count = results.rows.length;
+				      
+				      if(count==0){
+					      window.location= "views/config.html";	
+		          }	       
+						     	
+				   		}, null);
+					});
+
+
 		      }
-		      else
-		      {
-		      	/*setTimeout(function(){
-		      		toastr.info("Please, set up your configuration first","",{timeOut: 2000});
-						$("#toast-container").effect("bounce");
-		      	},500);
-		      	// Show modal
-					  $('#modal-config').modal({
-      				backdrop: 'static',
-       				keyboard: false
- 						});
-   					$('#modal-config').modal("show");*/
+		      else {
+		      		window.location = "views/config.html";		        
 		      }     
 				     	
 		   		}, null);
 			});
+
+				 	db.readTransaction(function (tx) {
+				   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+				      var count = results.rows.length;
+				      
+				      if(count<0){
+					      db.transaction(function (tx) {  
+					   			tx.executeSql("INSERT INTO Security (Password) VALUES (?)",["123456"],function(tx,success){},function(tx,e){}); 
+					 			});
+				      }	       
+						     	
+				   		}, null);
+					});
+
 	}
-
-
 
 
 

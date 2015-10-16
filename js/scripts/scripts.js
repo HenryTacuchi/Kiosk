@@ -2,6 +2,7 @@ $(document).ready(function(){
 
 	$('#cleanInputProduct').click(function(){
 		$('#skuCode').val("");
+		$('#skuCode').focus();
 		$('#sizeOptions option').remove();
 	});
 
@@ -101,14 +102,4 @@ $(document).ready(function(){
 		$("#skuCode").focus();
 	});
 
-	$('#imageLogo').change(function(){
-		$('#uploadFileLogo').val($(this).val());
-	});
-	$('#imageHome').change(function(){
-		$('#uploadFileHome').val($(this).val());
-	});
-	$('#imageBackground').change(function(){
-		$('#uploadFileBg').val($(this).val());
-	});
-	
 });

@@ -49,8 +49,8 @@ header .lblOption{
 
 }
 section{
-	margin-top: 5%;
-	margin-bottom: 7.5%;
+    margin-top: 6.5%;
+    margin-bottom: 6.5%;
 }
 .sectionSock{
 	margin-bottom: 2.5%;
@@ -75,6 +75,19 @@ section{
     transition: all 0.45s;
 }
 
+.yellow{
+	color: yellow;
+}
+#lblMessageResultProducts,
+#lblMessageNoStores,
+#invalidPassword{
+	color: yellow;
+	font-size: 16pt;
+}
+
+#skuCode::-ms-clear {
+    display: none;
+}
 
 footer .navbar-fixed-bottom{
 	height: 90px;
@@ -89,13 +102,13 @@ footer .navbar-fixed-bottom{
 	background-color: #EC542D;
 }
 .blueSock{
-	background: rgba(88,55,178,0.95);
-	background: -moz-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(88,55,178,0.95)), color-stop(100%, rgba(102,61,191,0.95)));
-	background: -webkit-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -o-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -ms-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: linear-gradient(135deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: rgba(0,127,207,0.95);
+	background: -moz-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,127,207,0.95)), color-stop(100%, rgba(102,61,191,0.95)));
+	background: -webkit-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -o-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: linear-gradient(135deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5837b2', endColorstr='#663dbf', GradientType=1 );
 }
 .blueLightSock{
@@ -131,14 +144,14 @@ footer .navbar-fixed-bottom{
 }
 
 .transparentSock{
-background: rgba(237,237,237,0.3);
-background: -moz-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
-background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(237,237,237,0.3)), color-stop(100%, rgba(255,255,255,0.3)));
-background: -webkit-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
-background: -o-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
-background: -ms-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
-background: linear-gradient(135deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=1 );
+	background: rgba(237,237,237,0.3);
+	background: -moz-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(237,237,237,0.3)), color-stop(100%, rgba(255,255,255,0.3)));
+	background: -webkit-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
+	background: -o-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
+	background: linear-gradient(135deg, rgba(237,237,237,0.3) 0%, rgba(255,255,255,0.3) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#ffffff', GradientType=1 );
 }
 
 .form-group{
@@ -164,7 +177,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', end
 	border-top: 2px solid white;
 	border-bottom: 2px solid white;
 }
-.lblArroba{
+.input-group-btn span{
 	height: 100%;
 	padding: 0 12px;
 	line-height: 20pt;
@@ -255,13 +268,13 @@ button:hover{
 }
 .btnBlue{
     padding: 6px 20px;
-	background: rgba(88,55,178,0.95);
-	background: -moz-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(88,55,178,0.95)), color-stop(100%, rgba(102,61,191,0.95)));
-	background: -webkit-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -o-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: -ms-linear-gradient(-45deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
-	background: linear-gradient(135deg, rgba(88,55,178,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: rgba(0,127,207,0.95);
+	background: -moz-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,127,207,0.95)), color-stop(100%, rgba(102,61,191,0.95)));
+	background: -webkit-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -o-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
+	background: linear-gradient(135deg, rgba(0,127,207,0.95) 0%, rgba(102,61,191,0.95) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5837b2', endColorstr='#663dbf', GradientType=1 );
 }
 .btn.noContent{
@@ -394,7 +407,7 @@ button:hover{
 
 .nav-tabs>li{ text-transform: uppercase;}
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{
-	background: rgba(88,55,178,0.95);
+	background: rgba(0,127,207,0.95);
 	color: #fff;
 }
 .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
@@ -420,7 +433,7 @@ button:hover{
 	background: rgba(52,128,216,0.95);
 }
 .table tbody tr:nth-child(2n+1){
-	background: rgba(88,55,178,0.95);
+	background: rgba(0,127,207,0.95);
 }
 .table thead tr:first-child{
 	background: rgba(52,128,216,0.95);
@@ -439,22 +452,18 @@ button:hover{
 	margin-top: 48pt;
 }
 .optionConf{
-	margin-top: 24pt;
+	margin-top: 32pt;
 }
+.optionConf div div>span{
+	width: 40%;
+} 
+.optionConf div div{
+	width: 100%;
+} 
 
-.fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
-}
-.fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
+#lbltitleConfig,
+#lbltitleChangePass{
+	margin-top: 8%;
+	margin-bottom: 3%;
+	font-size: 26pt;
 }

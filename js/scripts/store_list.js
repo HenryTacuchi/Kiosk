@@ -9,7 +9,7 @@ $(document).ready(function(){
 	$.ajax({
 		
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service1.svc/GetOtherLocations/"+qsParm["sku"]+"/"+qsParm["store"],
+          url: "http://192.168.1.135/KioskoServices/Service.svc/GetOtherLocations/"+qsParm["sku"]+"/"+qsParm["store"],
           async: false,
           dataType: "json",
           crossdomain: true,
@@ -70,7 +70,22 @@ $(document).ready(function(){
          
 	});
 
+  $(".btnScanProduct").click(function(){
+    localStorage.flag=2;
+    var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+      db.transaction(function (tx) {  
+        tx.executeSql("DELETE FROM ProductSearched",[],function(tx,success){
+           window.location = "../index.html";
+        },null);
+      });
+   
+  });
 
+
+  $(".btnHome").click(function(){
+      localStorage.flag=1;
+      window.location = "../index.html";
+  });
 
   $(document).on("click",".btn-Email",function(e){
 
@@ -171,7 +186,7 @@ $(document).ready(function(){
   function sendEmail(emailValue,fromValue,toValue){
      $.ajax({
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service1.svc/SendMail/"+emailValue+"/"+fromValue+"/"+toValue,
+          url: "http://192.168.1.135/KioskoServices/Service.svc/SendMail/"+emailValue+"/"+fromValue+"/"+toValue,
           async: false,
           dataType: "json",
           crossdomain: true,
@@ -198,7 +213,7 @@ $(document).ready(function(){
 
     $.ajax({
             type: "GET",
-            url: "http://192.168.1.135/KioskoServices/Service1.svc/SubmitEmail/"+email,
+            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmail/"+email,
             async: false,
             dataType: "json",
             crossdomain: true,
@@ -237,4 +252,4 @@ $(document).ready(function(){
 
 
 
-//http://192.168.1.135/KioskoServices/Service1.svc/GetOtherLocations/1000001
+//http://192.168.1.135/KioskoServices/Service.svc/GetOtherLocations/1000001
