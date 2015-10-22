@@ -1,23 +1,24 @@
 body{
 	background-color: black;
 	color: white;
-	background-image: url('../public/images/frame/bg.jpg');
-	background-size: cover;
+	margin-bottom: 90px;
 }
-.bg{
-	background-color: black;
-	background-image: url('../img/bg_secondary.jpg');
-	background-size: cover;
+.bgBody{
+	position: absolute;
+	z-index: 0;
+	width: 100%;
+	/*height: 100%;*/
+	top: 0; right: 0; bottom: 0; left: 0;
+	margin: auto;
 }
 .logoCompany{
-	background-image: url('../public/images/frame/logo.jpg');
-	
+
 }
 #alttext-container{
 	border: none !important;
 }
 a,.lblOption{
-	font-size: 18pt !important;
+	font-size: 17pt !important;
 	color: white;
 }
 p{
@@ -53,6 +54,7 @@ section{
     margin-bottom: 6.5%;
 }
 .sectionSock{
+	position: relative;
 	margin-bottom: 2.5%;
 }
 .sectionStore{
@@ -122,13 +124,13 @@ footer .navbar-fixed-bottom{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3480d8', endColorstr='#4d97d9', GradientType=1 );
 }
 .greenSock{
-	background: rgba(0,140,0,0.95);
-	background: -moz-linear-gradient(-45deg, rgba(0,140,0,0.95) 0%, rgba(0,163,0,0.95) 100%);
-	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(0,140,0,0.95)), color-stop(100%, rgba(0,163,0,0.95)));
-	background: -webkit-linear-gradient(-45deg, rgba(0,140,0,0.95) 0%, rgba(0,163,0,0.95) 100%);
-	background: -o-linear-gradient(-45deg, rgba(0,140,0,0.95) 0%, rgba(0,163,0,0.95) 100%);
-	background: -ms-linear-gradient(-45deg, rgba(0,140,0,0.95) 0%, rgba(0,163,0,0.95) 100%);
-	background: linear-gradient(135deg, rgba(0,140,0,0.95) 0%, rgba(0,163,0,0.95) 100%);
+	background: rgba(1,166,28,0.95);
+	background: -moz-linear-gradient(-45deg, rgba(1,166,28,0.95) 0%, rgba(0,163,0,0.95) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(1,166,28,0.95)), color-stop(100%, rgba(0,163,0,0.95)));
+	background: -webkit-linear-gradient(-45deg, rgba(1,166,28,0.95) 0%, rgba(0,163,0,0.95) 100%);
+	background: -o-linear-gradient(-45deg, rgba(1,166,28,0.95) 0%, rgba(0,163,0,0.95) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(1,166,28,0.95) 0%, rgba(0,163,0,0.95) 100%);
+	background: linear-gradient(135deg, rgba(1,166,28,0.95) 0%, rgba(0,163,0,0.95) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008c00', endColorstr='#00a300', GradientType=1 );
 }
 
@@ -197,7 +199,8 @@ footer .navbar-fixed-bottom{
 	padding: 0;
 }
 #selectDomain,
-#selectSendDomain{
+#selectSendDomain,
+#selectRecoveryDomain{
 	height: 100%;
 	padding: 0 12px;
 	font-size: 20pt;
@@ -210,6 +213,15 @@ footer .navbar-fixed-bottom{
 }
 .eac-cval{
 	width: 100%;
+}
+
+#rowProductDescription{
+	position: relative;
+}
+#rowLongDescription{
+	position: absolute;
+	z-index: 1010;
+	top:0;
 }
 
 .shortDescription,
@@ -313,6 +325,10 @@ button:hover{
 .thumbnail .caption{
 	color: inherit;
 	padding: 9pt 0;
+}
+.thumbnail  p:hover{
+	color: white;
+	text-decoration: none;
 }
 .thumbnail .caption p:first-child{
 	text-align: justify;
@@ -466,4 +482,28 @@ button:hover{
 	margin-top: 8%;
 	margin-bottom: 3%;
 	font-size: 26pt;
+}
+
+
+#configPanel .extruder-content{
+	height: 220px !important;
+}
+
+#configPanel.extruder.right .ext_wrapper{
+    bottom: 0 !important;
+    top: 300px !important;
+}
+#configPanel.extruder.right .flap{
+	top: 85px !important;
+}
+
+.btnLink{
+	display: table;
+	text-align: center;
+	margin: auto;
+	float: none;
+}
+
+a.thumbnail,a.thumbnail:hover{
+	text-decoration: none;
 }

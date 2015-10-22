@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 
+  loadData();
   checkPassword();
 
 	$("#saveConfig").click(function(){
@@ -9,15 +10,20 @@ $(document).ready(function(){
 	});
 
 	$("#btnConfiguration").click(function(){
-		var storeNo= $("#storeNo").val();	
-		if(storeNo.length>0 ){
-			saveConfiguration(storeNo);
+		var storeNo= $("#storeNo").val();
+		var webIP= $("#webServices").val();	
+		var email= $("#adminEmail").val();		
+		var checkEmail= validateEmail();
+		if(storeNo.length>0 && webIP.length>0 && email.length>0 && checkEmail != -1 ){
+			saveConfiguration(storeNo.trim(),webIP.trim(),checkEmail.trim());
 
 		}
 		else {
-			if (storeNo.length<0)$("#storeNo").focus();
-			toastr.info("Password can not be empty!","",{timeOut: 1000});
-					 	  $("#toast-container").effect("bounce");	
+			if (storeNo.length<0){$("#storeNo").focus();}
+			else if (webIP.length<0){$("#webServices").focus();}
+			else {$("#adminEmail").focus();}
+			toastr.info("There are some required values that are empty!","",{timeOut: 1000});
+			$("#toast-container").effect("bounce");	
 		}
 		
 	});
@@ -34,7 +40,7 @@ $(document).ready(function(){
 		     		if (results.rows.item(0).Password== oldPass){
 		     			var newPass=$("#newPassword").val();
 		     			var repPass=$("#newPasswordRepeat").val(); 
-		     			if (newPass==repPass){savePassword(newPass); $("#invalidPassword").slideUp("fast");}
+		     			if (newPass==repPass){savePassword(newPass.trim()); $("#invalidPassword").slideUp("fast");}
 		      		else{
 			      		toastr.info("Please, check your password and confirmation again!","",{timeOut: 1000});
 						 	  $("#toast-container").effect("bounce");
@@ -51,7 +57,7 @@ $(document).ready(function(){
 		      // Check both password new one and repeated one
 		      	var newPass=$("#newPassword").val(); 	
 		      	var repPass=$("#newPasswordRepeat").val(); 
-		      	if (newPass==repPass){savePassword(newPass);}
+		      	if (newPass==repPass){savePassword(newPass.trim());}
 		      	else{
 		      		toastr.info("Please, check your password and confirmation again!","",{timeOut: 1000});
 					 	  $("#toast-container").effect("bounce");
@@ -63,22 +69,56 @@ $(document).ready(function(){
 
 	});
 
-
-function checkPassword(){
-	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
-		db.readTransaction(function (tx) {
-				tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
-					var count = results.rows.length;
-		      if(count==0){
-		     		$("#oldPasswordGroup").hide();
-		      }
-		   	});
-		 
-		});
-}
+	$("img").on('error', function(){
+			$(this).attr("src","../img/noImage.jpg");		
+	});
 
 
-	function saveConfiguration(storeNo){
+	function checkPassword(){
+		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+			db.readTransaction(function (tx) {
+					tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+						var count = results.rows.length;
+			      if(count==0){
+			     		$("#oldPasswordGroup").hide();
+			      }
+			   	});
+			 
+			});
+	}
+
+	function loadData(){
+		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+			db.readTransaction(function (tx) {
+					tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
+						var count = results.rows.length;
+			      if(count>0){
+			      		$("#storeNo").val(results.rows.item(0).StoreNo);
+								$("#webServices").val(results.rows.item(0).WebServiceIP);	
+								var email= results.rows.item(0).AdminEmail;
+								var checkDom = email.lastIndexOf("@");
+      					var resultDom = email.substring(checkDom + 1);
+      					var splitEmail= email.substring(0,checkDom);
+      					var existDomain= $("#selectDomain").val(resultDom);
+      					if(existDomain){
+      						$("#adminEmail").val(splitEmail);
+      					}
+      					else{
+      						$("#adminEmail").val(email);
+      						("#selectDomain").val("Other");
+
+      					}
+
+								
+
+			      }
+			   	});
+			 
+			});
+
+	}
+
+	function saveConfiguration(storeNo,webIP,email){
 	
 		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
     db.transaction(function (tx) {  
@@ -88,7 +128,7 @@ function checkPassword(){
 				);
 		});
     db.transaction(function (tx) {  
-	   		tx.executeSql("INSERT INTO KioskPreferences (StoreNo) VALUES (?)",[storeNo],
+	   		tx.executeSql("INSERT INTO KioskPreferences (StoreNo,WebServiceIP,AdminEmail ) VALUES (?,?,?)",[storeNo,webIP,email],
 	   			function(tx,success){  	
 	   					toastr.success("Configuration set up successfully!","",{timeOut: 1000});
 							$("#toast-container").effect("slide","slow");   						},
@@ -125,8 +165,36 @@ function checkPassword(){
 	}
 
 
+	
+	 function validateEmail(){
+      var domain = $("#selectDomain option:selected").text();
+      var email=$("#adminEmail").val();
+      var errorDomain= (email.match(/.com/g) || []).length;
+      var errorSintax= (email.match(/@/g) || []).length;
+      var checkDom = email.lastIndexOf("@");
+      var resultDom = email.substring(checkDom + 1);
+      var whitespaces = email.lastIndexOf(" ");
 
+      if(domain=="Other"){
+          if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==1) && (resultDom!=email && resultDom.trim().length>0 )){
+            return email;      
+          }
+          else{
+           	return -1            
+          }
+        } 
+        else{
+          email=email+"@"+domain
+          if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==0)){
+            return email
+          }
+          else{
+           return -1;
+          }
 
+        } 
+      
+  }
 
 
 });

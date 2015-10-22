@@ -1,32 +1,15 @@
 $(document).ready(function(){
 
+	var currentPage = location.href;
+	var indexPage="";
+	init();
+	loadImages();
+  
+
 	$('#cleanInputProduct').click(function(){
 		$('#skuCode').val("");
 		$('#skuCode').focus();
 		$('#sizeOptions option').remove();
-	});
-
-	//Carousel
-	$('#myCarousel').carousel({
-	  interval: 3500
-	});
-
-	$('.carousel .item').each(function(){
-	  var next = $(this).next();
-	  if (!next.length) {
-	    next = $(this).siblings(':first');
-	  }
-	  next.children(':first-child').clone().appendTo($(this));
-
-	  if (next.next().length>0) {
-	 
-	      next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
-	      
-	  }
-	  else {
-	      $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-	     
-	  }
 	});
 
 	/* center modal */
@@ -52,8 +35,13 @@ $(document).ready(function(){
 
 	$(window).on('resize', centerModals);
 
+	
 
-
+	$(".img-responsive").error(function(){
+		if (indexPage)
+		$(this).attr("src","../img/noImage.jpg");
+	});
+	
 	$("#cancelClientEmail").click(function(){
 		$("#modal-container-submit").modal("hide");
 	});
@@ -63,9 +51,6 @@ $(document).ready(function(){
 
 	$('#cancelEmailfromStore').click(function(){
 		$("#modal-email").modal('hide');
-	});
-	$('#cancelModalKey').click(function(){
-		$('#modal-key').modal('hide');
 	});
 
 	$('.lblMessageOtherDomain').hide();
@@ -91,6 +76,17 @@ $(document).ready(function(){
 			$('.lblMessageOtherDomain').slideUp("fast");
 		}
 	});
+	$('#selectRecoveryDomain').change(function(){
+		console.log("df");
+		var toCompare = $('#selectRecoveryDomain option:selected').text();
+		if(toCompare == "Other"){
+			$('.lblArroba').css('opacity','0');
+			$('.lblMessageOtherDomain').show().effect("slide");
+		}else{
+			$('.lblArroba').css('opacity','1');
+			$('.lblMessageOtherDomain').slideUp("fast");
+		}
+	});
 
 	$('.thumbnail img').hover(function(){
 		$(this).effect("shake");
@@ -102,4 +98,70 @@ $(document).ready(function(){
 		$("#skuCode").focus();
 	});
 
+	$('#btnRecovery').click(function(){
+		$('.hideRecovery').show();
+		$('.btnHideRecovery').show();
+	});
+
+	$(".btnBack").click(function(){
+		var currentPage = location.href;
+		var rowid, count;
+		if (afterHomePage==currentPage){
+		localStorage.flag=2;		
+		}
+		window.history.back();
+		
+	});
+
+	function init() {
+	 	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+	 	var currentPage = location.href;
+		db.transaction(function (tx) {  
+			tx.executeSql("INSERT INTO History (Url) VALUES (?)",[currentPage],function(tx,success){},function(tx,e){}); 
+		});
+		db.transaction(function (tx) {
+		   	tx.executeSql("SELECT * FROM History", [], function (tx, results) {
+		      afterHomePage = results.rows.item(1).Url;
+		      indexPage= results.rows.item(0).Url;
+			},null);
+		});	
+
+	}
+
+	function loadImages(){
+		$(".logoCompany").attr("src",localStorage.logo);
+		$(".homeScreen").attr("src",localStorage.home);		
+	}
+
+	$('#btnHideSection').click(function(){
+		$('.btnHideRecovery').hide();
+		$('.hideRecovery').hide();
+	});
+	$('#cancelSettings').click(function(){
+		$('#btnHideSection').click();
+	});
+
+
+
+	if(localStorage.current_lang = "es"){
+
+		$('#lblWelcome').text( " Bienvenido a RCS" );
+		
+	}
+
 });
+
+
+document.onkeydown = keydown;
+
+function keydown(evt){
+  if (!evt) evt = event;
+  if (evt.ctrlKey && evt.altKey && evt.keyCode==115){ //CTRL+ALT+F4
+    alert("CTRL+ALT+F4"); 
+  }
+  else if (evt.shiftKey && evt.keyCode == 9){ //Shif+TAB
+    alert("Shift+TAB");
+  }
+}
+
+

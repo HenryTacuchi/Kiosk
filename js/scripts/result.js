@@ -6,34 +6,83 @@ $(document).ready(function(){
 	init();
 		$.ajax({
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service.svc/GetSKUInfo/"+qsParm["sku"]+"/"+qsParm["size"]+"/"+qsParm["store"],
+          url: "http://"+ localStorage.webIp+"/KioskoServices/Service.svc/GetSKUInfo/"+qsParm["sku"]+"/"+qsParm["size"]+"/"+qsParm["store"],
           async: false,
           dataType: "json",
           crossdomain: true,
           success:function(result){
           	var data = result.GetSKUInfoResult;
+          	var currencySymbol;
           	$.each(data, function( index, value) {
 						
+							// Retrieve product information
+							var price= (parseFloat(value.RetailPrice)).toFixed(2);
           		$(".shortDescription").text(value.Description);
-          		$("#txtStyle").text(value.Style);
-          		var price= (parseFloat(value.RetailPrice)).toFixed(2);
-          		$("#txtPrice").text(price);
+          		$("#txtStyle").text(value.Style);          		
+          		
+          		if (value.CurrencyName == "NUEVOS SOLES"){
+          			currencySymbol= "S/. ";          		
+          		}else{
+          			currencySymbol= "$ ";          			
+          		} 
+          		$("#txtPrice").text(currencySymbol+ price);
           		
           		if(value.OnHandQty > 0){
-          			$("#txtStock").text("IN STOCK").addClass("available");
-          			
+          			$("#txtStock").text("IN STOCK").addClass("available");          			
           		}
           		else{
-          			$("#txtStock").text("OUT STOCK").addClass("no-available");;
-          			
+          			$("#txtStock").text("OUT STOCK").addClass("no-available");
           		}
           		$("#txtUnits").text(value.OnHandQty);
           		$("#txtColor").text(value.colorName);
           		$("#txtSize").text(value.SizeCode);
+          		$("#longDescriptionContent").text(value.LongDescription);
+          		$("#longDescriptionSingleImage").text(value.LongDescription);
 
+          		// Retrieve images
+          		images=value.ImagePath;
+          		if(images.length>1){
+          			$("#longDescriptionContent").show();
+	          		$.each(images, function( index, value) {
+	          				if(index==0){
+		          				$("#zoomImage").children().attr("src",value.Path);
+		          					
+		          			}
+		          			else{
+				          				var active, path;
+					          				if (index==1){
+					          					active="active";
+					          				}	
+					          				else{
+					          					active="";
+					          				}
+				          			  //var exists= ImageExist(value.Path);
+				          				//if (exists == true) {path= value.Path;}
+			          					//else{path= "../img/noImage.jpg"}		          				
+			          					path= value.Path;
+				          				var template= _.template($("#carouselTemplate").html());
+				            			var html= template ({
+									            				active: active,
+									            				path: path 
+									            			});            	
+				            			$(".carousel-inner").append(html);
+		          			}  
+		          		});
+		          	startCarrousel();
+
+	          	}
+	          	else if(images.length==0) {
+		          		$.each(images, function( index, value) {
+		          			$("#zoomImage").children().attr("src",value.Path);
+		          		});
+		          		$("#myCarousel").hide();
+		          		$("#technicalDescriptionPanel").show();
+		         	}
+
+          		// Retrieve related products
           		$.ajax({
 		            type: "GET",
-		            url: "http://192.168.1.135/KioskoServices/Service.svc/GetRelatedProduct/"+qsParm["sku"]+"/"+qsParm["store"],
+		            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/GetRelatedProduct/"+qsParm["sku"]+"/"+qsParm["store"],
 		            async: false,
 		            dataType: "json",
 		            crossdomain: true,
@@ -41,15 +90,16 @@ $(document).ready(function(){
 		            	var relatedProducts = relatedProducts.GetRelatedProductResult;
 		            	if(relatedProducts.length>0){
 			            	$.each(relatedProducts, function( index, item) {
-			            		var i=index+1;
-			            		$("#relatedItem"+i+" p:first-child").text(item.Descr);
+			            		var i= index+1;
 			            		var price= (parseFloat(item.RetailPrice)).toFixed(2);
-			            		$("#relatedItem"+i+" p:nth-child(2)").text(price);
+			            		$("#relatedItem"+i+" p:first-child").text(item.Descr);			            		
+			            		$("#relatedItem"+i+" p:nth-child(2)").text(currencySymbol+price);
 			            		$(".sku"+i).text(item.SKU);
-			            		$(".size"+i).text(item.SizeCode);
-			            		$("#linkRelated"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);
+			            		$(".size"+i).text(item.SizeCode);			            		
+			            		$(".relatedProductImage"+i).attr("src",item.ImagePath);
+			            		$("#relatedItem"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);
 
-	          				});
+			     				});			            
 			            }
 			            else{
 			            	$(".productsRelated").hide();
@@ -74,9 +124,8 @@ $(document).ready(function(){
 		window.location = "store_list.html?sku="+qsParm["sku"]+"&store="+qsParm["store"];
 	});
 
-	$(".btnHome").click(function(){
-			localStorage.flag=1;
-		 	window.location = "../index.html";
+	$("img").on('error', function(){
+			$(this).attr("src","../img/noImage.jpg");		
 	});
 
 	$(".btnReturn").click(function(){
@@ -87,6 +136,10 @@ $(document).ready(function(){
 		}
 		window.history.back();
 		
+	});
+	$(".btnHome").click(function(){
+			localStorage.flag=1;
+		 	window.location = "../index.html";
 	});
 	
   $(".btnScanProduct").click(function(){
@@ -100,12 +153,47 @@ $(document).ready(function(){
    
   });
 
+  $(".img-responsive").click(function(){
+		var path=$(this).attr("src");
+		$("#zoomImage").trigger('zoom.destroy');
+		$("#zoomImage").children().attr("src",path);
+		$('#zoomImage').zoom({ on:'toggle' });
 
-	$(".relatedProductImage").click(function(){
-		this
-		window.location = "views/result.html?sku="+sku+"&size="+size;
 	});
 
+  function ImageExist(url) 
+	{
+   var img = new Image();
+   img.src = url;
+   return img.height != 0;
+	}
+
+	function startCarrousel(){
+		$('#myCarousel').carousel({
+	 	  interval: 3000
+	   });
+
+	 	$('.carousel .item').each(function(){
+		   var next = $(this).next();
+		   if (!next.length) {
+		     next = $(this).siblings(':first');
+		   }
+		   next.children(':first-child').clone().appendTo($(this));
+
+		   if (next.next().length>0) {
+		  
+		       next.next().children(':first-child').clone().appendTo($(this)).addClass('rightest');
+		       
+		   }
+		   else {
+		       $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+		      
+		   }
+	 	});
+	}	
+
+		
+	
  $("#submitClientEmail").click(function(){
 			var domain = $("#selectDomain option:selected").text();
 			var email=$("#clientEmail").val();
@@ -138,6 +226,29 @@ $(document).ready(function(){
 			
 	});
 
+ 	$("#modal-container-submit").on("shown.bs.modal",function(){
+  	 $("#selectDomain").val("Other");
+  	 $("#selectDomain").change();
+  	 $("#clientEmail").focus();
+  });
+
+	$("#longDescriptionContent").buildMbExtruder({
+          positionFixed:true,
+          width:720,
+          sensibility:800,
+          position:"right", // left, right, bottom
+          extruderOpacity:1,
+          flapDim:100,
+          textOrientation:"tb", // or "tb" (top-bottom or bottom-top)
+          onExtOpen:function(){},
+          onExtContentLoad:function(){},
+          onExtClose:function(){},
+          hidePanelsOnClose:true,
+          autoCloseTime:0, // 0=never
+          slideTimer:500
+  });
+  
+ $(".flapLabel").text("Technical Description");
 
 	function readParameters() {
 		    var query = window.location.search.substring(1);
@@ -171,7 +282,7 @@ $(document).ready(function(){
 
 		$.ajax({
             type: "GET",
-            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmail/"+email,
+            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SubmitEmail/"+email,
             async: false,
             dataType: "json",
             crossdomain: true,

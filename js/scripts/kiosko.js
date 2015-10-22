@@ -1,12 +1,12 @@
 $(document).ready(function(){
 	
-  var storeNo,backgroundImage,logoImage,homeImage;
+  var storeNo;
 	
+	getLanguage();
 	checkModal();
 	$("#homeScreen").click(function(){
 	  init();
-	});  
-
+	});	
 	// Search sizes
 	$("#skuCode").keydown(function(e){
 		  
@@ -16,7 +16,7 @@ $(document).ready(function(){
 			var sku= $("#skuCode").val();
 			 $.ajax({
               type: "GET",
-              url: "http://192.168.1.135/KioskoServices/Service.svc/LoadSizes/"+sku,
+              url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/LoadSizes/"+sku,
               async: false,
               dataType: "json",
               crossdomain: true,
@@ -54,9 +54,19 @@ $(document).ready(function(){
 	$(document).keydown(function(e){
 		  
 		  if (e.which == 13) e.preventDefault();
-
-
 	});
+
+	$("#modal-container-submit").on("shown.bs.modal",function(){
+  	 $("#selectRecoveryDomain").val("Other");
+  	 $("#selectRecoveryDomain").change();
+  	 $("#clientEmail").focus();
+  });
+
+  $("#btnRecovery").click(function(){
+  	 $("#selectRecoveryDomain").val("Other");
+  	 $("#selectRecoveryDomain").change();
+  	 $("#recoveryPassword").focus();
+  });
 
   $(".btnHome").click(function(){
  		 localStorage.flag=1;	
@@ -65,7 +75,7 @@ $(document).ready(function(){
 	$(".btnContinue").click(function(){
 		var sku= $("#skuCode").val();
 		var size = $("#sizeOptions option:selected").text();
-		
+		var index= $("#sizeOptions").val();
 		if (sku.length!=0 && size!=""){
 			
 			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
@@ -73,7 +83,7 @@ $(document).ready(function(){
 		   		tx.executeSql("DELETE FROM ProductSearched");
 			 	});
 			db.transaction(function (tx) {  
-		   		tx.executeSql("INSERT INTO ProductSearched (Sku) VALUES (?)",[sku],
+		   		tx.executeSql("INSERT INTO ProductSearched (Sku, Size) VALUES (?,?)",[sku,index],
 		   			function(tx,success){ console.log(sku+" saved"); window.location = "views/result.html?sku="+sku+"&size="+size+"&store="+storeNo;},
 		   			function(tx,e){ console.log(e);}
 					);
@@ -91,7 +101,7 @@ $(document).ready(function(){
 		window.location = "views/size_chart.html";
 	});
 
-
+	
 	$("#submitClientEmail").click(function(){
 		var domain = $("#selectDomain option:selected").text();
 		var email=$("#clientEmail").val();
@@ -136,7 +146,7 @@ $(document).ready(function(){
 
 		$.ajax({
             type: "POST",
-            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmailPost",
+            url: "http://"+ localStorage.webIp + " /KioskoServices/Service.svc/SubmitEmailPost",
             async: false,
             contentType: "application/json",
             data: JSON.stringify({"email": email}),
@@ -177,43 +187,49 @@ function checkModal(){
 						      			db.readTransaction(function (tx) {
 								   				tx.executeSql("SELECT * FROM ProductSearched", [], function (tx, results) {
 								   						var count = results.rows.length;
-							      		      if(count>0){
+								   						if(count>0){
+							      		     	 var index= results.rows.item(0).Size;
 							      		     	 $("#skuCode").val(results.rows.item(0).Sku);
 							      		     	 var e = $.Event("keydown");
    														 e.which = 13; 
    														 $("#skuCode").trigger(e);
+   														 $("#sizeOptions").val(index);
    														 $("#skuCode").focus();
 							      		      }
 								   				},null);
 							   				});
 		      
 							      		init();
+							      		loadImages();
 							      		$("#skuCode").focus();
 							      }
 							      else{
+							      	init();
+							      	loadImages();
 							      	$("#homeScreen").show();
 							      }
 							    }
 							    else{
-							    
+							     	init();
+							      loadImages();
 							    	$("#homeScreen").show();
 							    }
 					      		      					      	
 			      }
 			      else{
-			      		$("#homeScreen").show();
+			      		window.location = "views/config.html";
 			      }
-		}, function(){$("#homeScreen").show();});
+		}, function(){init();});
 	});	   	
 }
 	function init(){
 			//Open and/or create structure
 			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 			db.transaction(function (tx) {  
-	   		tx.executeSql("CREATE TABLE IF NOT EXISTS KioskPreferences (BackgroundImage TEXT, StoreNo INT, LogoImage TEXT,	HomeImage TEXT)");
+	   		tx.executeSql("CREATE TABLE IF NOT EXISTS KioskPreferences (BackgroundImage TEXT, StoreNo INT, LogoImage TEXT,	HomeImage TEXT, WebServiceIP TEXT, AdminEmail TEXT)");
 		 	});
 		 	db.transaction(function (tx) {  
-	   		tx.executeSql("CREATE TABLE IF NOT EXISTS ProductSearched(Sku TEXT)");
+	   		tx.executeSql("CREATE TABLE IF NOT EXISTS ProductSearched(Sku TEXT, Size TEXT)");
 		 	});
 		 	db.transaction(function (tx) {  
 	   		tx.executeSql("CREATE TABLE IF NOT EXISTS History(Url TEXT)");
@@ -237,46 +253,259 @@ function checkModal(){
 		 	db.readTransaction(function (tx) {
 		   	tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
 		      var count = results.rows.length;
+		  
 		      
 		      if(count>0){
+
+		      	localStorage.webIp= results.rows.item(0).WebServiceIP;
 		      	storeNo= results.rows.item(0).StoreNo;
-		       	localStorage.flag = 1;
+		      	localStorage.background= results.rows.item(0).BackgroundImage;
+		     		localStorage.logo= results.rows.item(0).LogoImage;
+		   			localStorage.home= results.rows.item(0).HomeImage;
+		     		localStorage.email= results.rows.item(0).AdminEmail;
+		     		localStorage.flag = 1;
 
-		       	db.readTransaction(function (tx) {
-				   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
-				      var count = results.rows.length;
-				      
-				      if(count==0){
-					      window.location= "views/config.html";	
-		          }	       
-						     	
-				   		}, null);
-					});
+		     		db.readTransaction(function (tx) {
+					   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+					      var count = results.rows.length;					      
+					      if(count==0 || (storeNo==null || localStorage.webIp == "null" || localStorage.email == "null") ){
+						      window.location= "views/config.html";	
+			          }	       
+							     	
+					   	}, null);
+						});
 
+		      	if(localStorage.background== "null" || localStorage.logo== "null" || localStorage.home== "null"){
+		      			var bg,logo,home;
+				      	$.ajax({
+				              type: "GET",
+				              url: "http://"+localStorage.webIp+"/KioskoServices/Service.svc/GetKioskPreferencesPath/"+storeNo,
+				              async: false,
+				              dataType: "json",
+				              crossdomain: true,
+				              success:function(result){
+				              	var data= result.GetKioskPreferencesPathResult;
+				              	if (data!=null){					              	
+												 	bg= data.BackGroundImagePath;
+												 	logo = data.LogoImagePath;
+													home = data.HomeImagePath;	
+					              	db.transaction(function (tx) {  
+							   						tx.executeSql("UPDATE KioskPreferences SET BackgroundImage = ? , LogoImage = ? , HomeImage= ? ",[bg,logo,home],function(tx,success){},function(tx,e){}); 
+							  					});
 
+												}
+				 						 	
+				     					},       					
+										  error: function(error) {
+									 	  	 toastr.error("Missing Web Service IP","",{timeOut:1000});
+									 	  	 $("#toast-container").effect("bounce");
+									    }	                
+			     			});
+
+				     	 	db.readTransaction(function (tx) {
+			   					tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results){
+					      		var count = results.rows.length;	      
+				      			if(count>0){
+									     	localStorage.background= results.rows.item(0).BackgroundImage;
+								     		localStorage.logo= results.rows.item(0).LogoImage;
+								   			localStorage.home= results.rows.item(0).HomeImage;
+		     		
+							    	}
+		      				})
+		      			});
+		      	}   			      
+	 
 		      }
 		      else {
 		      		window.location = "views/config.html";		        
 		      }     
 				     	
 		   		}, null);
-			});
-
-				 	db.readTransaction(function (tx) {
-				   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
-				      var count = results.rows.length;
-				      
-				      if(count<0){
-					      db.transaction(function (tx) {  
-					   			tx.executeSql("INSERT INTO Security (Password) VALUES (?)",["123456"],function(tx,success){},function(tx,e){}); 
-					 			});
-				      }	       
-						     	
-				   		}, null);
-					});
+			});		
 
 	}
 
+		function loadImages(){
+			$(".logoCompany").attr("src",localStorage.logo);
+			$(".homeScreen").attr("src",localStorage.home);
+			$(".bgBody").attr("src",localStorage.background);
+		}
+
+	 function validateEmail(){
+      var domain = $("#selectRecoveryDomain option:selected").text();
+      var email=$("#recoveryPassword").val();
+      var errorDomain= (email.match(/.com/g) || []).length;
+      var errorSintax= (email.match(/@/g) || []).length;
+      var checkDom = email.lastIndexOf("@");
+      var resultDom = email.substring(checkDom + 1);
+      var whitespaces = email.lastIndexOf(" ");
+
+      if(domain=="Other"){
+          if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==1) && (resultDom!=email && resultDom.trim().length>0 )){
+            return email;      
+          }
+          else{
+           	return -1            
+          }
+        } 
+        else{
+          email=email+"@"+domain
+          if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==0)){
+            return email
+          }
+          else{
+           return -1;
+          }
+
+        } 
+      
+  }
+
+  $(".btnKey").click(function(){
+		 	$("#modal-key").modal("show");
+  });
+
+  $("#btnRecoverySend").click(function(){
+		 // Delete all information from dataBase
+		 var validatedEmail= validateEmail();
+		 var adminEmail;
+		 var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+			 db.readTransaction(function (tx) {				   
+				   tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
+				     var count = results.rows.length;
+				     if(count>0){
+					 		adminEmail= results.rows.item(0).AdminEmail;
+					 		count=0;
+						 		if(validatedEmail==adminEmail){
+									 
+									 db.transaction(function (tx) {  
+								   		tx.executeSql("DROP TABLE KioskPreferences",[],function(){
+								   			count++; 
+								   				if(count==4){
+									   				 toastr.success("Restoration complete!");
+										 				 $("#toast-container").effect("slide","slow");
+										 				 location.reload();
+									   			}
+								   			},null);
+								   		
+									 	});
+									 db.transaction(function (tx) {  
+								   		tx.executeSql("DROP TABLE Security",[],function(){
+								   			count++; 
+								   				if(count==4){
+									   				 toastr.success("Restoration complete!");
+										 				 $("#toast-container").effect("slide","slow");
+										 				 location.reload();
+									   			}
+								   			},null);
+								   
+									 	});
+									 db.transaction(function (tx) {  
+								   		tx.executeSql("DROP TABLE ProductSearched",[],function(){
+								   			count++; 
+								   				if(count==4){
+									   				 toastr.success("Restoration complete!");
+										 				 $("#toast-container").effect("slide","slow");
+										 				 location.reload();
+									   			}
+								   			},null);
+								   	
+									 	});
+									 db.transaction(function (tx) {  
+								   		tx.executeSql("DROP TABLE History",[],function(){
+								   			count++;
+									   			if(count==4){
+									   				 toastr.success("Restoration complete!");
+										 				 $("#toast-container").effect("slide","slow");
+										 				 location.reload();
+									   			}
+								   			},null);
+								   	
+									 	});
+									
+									 								
+								}	
+								else{
+										toastr.error("Try again please!");
+				 	  				$("#toast-container").effect("bounce");
+								}
+					   
+					   }
+					   else{
+						   	toastr.info("No exist an email in the database!");
+					 	  	$("#toast-container").effect("bounce");
+					   }	       
+						     	
+				   		}, null);
+				});		 
+  });
+	
+
+  $("#modal-key").on("shown.bs.modal",function(){
+  	 $("#passwordKey").focus();  
+  });
+
+  $("#modal-container-submit").on("shown.bs.modal",function(){
+  	 $("#clientEmail").focus();  
+  });
+
+  $("#lockSettings").click(function(){
+		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+		var passwordKey= $("#passwordKey").val();
+  	db.readTransaction(function (tx) {
+		   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+		      var count = results.rows.length;
+		      
+		 			if(count>0){
+			 			if(results.rows.item(0).Password==passwordKey){
+	  					
+	  					var visible= $(".btnConfig").is(":visible");
+		  					if(visible== true){
+		  						$(".btnConfig").hide();
+		  						$(".btnConfig").addClass("hide");
+		  						$("#passwordKey").val("");
+		  						$("#modal-key").modal("hide");
+  								toastr.success("Lock configuration successfully!");
+									$("#toast-container").effect("slide","slow");
+		  					}
+		  					else{
+		  						$(".btnConfig").show();
+		  						$(".btnConfig").removeClass("hide");
+		  						$("#modal-key").modal("hide");
+		  						$("#passwordKey").val("");
+  								toastr.success("Unlock configuration successfully");
+									$("#toast-container").effect("slide","slow");
+		  					}
+  					
+	  				}
+						else{
+							toastr.error("Try again please!");
+				 	  	$("#toast-container").effect("bounce");
+						}
+			     
+          }	       
+				     	
+		   		}, null);
+		});
+	});
+
+	$("#passwordKey").keydown(function(e){
+		  
+		  if (e.which == 13){
+				e.preventDefault();
+				$("#lockSettings").click();
+			}
+	});
+
+	function getLanguage(){
+		var lang = "";
+
+		lang = navigator.language.split("-");
+
+	    localStorage.current_lang = (lang[0]);
+		
+	    //localStorage.current_lang es en 
+	}
 
 
 });

@@ -1,15 +1,14 @@
 
 
 $(document).ready(function(){
-
+  
 	var qsParm = new Array();
   var zipValue, stateValue,cityValue,fromValue,addressValue;
  	qs();
 
-	$.ajax({
-		
+	$.ajax({		
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service.svc/GetOtherLocations/"+qsParm["sku"]+"/"+qsParm["store"],
+          url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/GetOtherLocations/"+qsParm["sku"]+"/"+qsParm["store"],
           async: false,
           dataType: "json",
           crossdomain: true,
@@ -35,18 +34,18 @@ $(document).ready(function(){
              		var stock= (parseFloat(value.OnHandQty)).toFixed(0);
              		var template= _.template($("#storeSec").html());
             		var html= template ({
-            			storeName: value.StoreName,
-            			address: value.Address1 ,
-            			phone: value.Phone1,
-            			stock: stock,
-            			emailAddress: value.StoreEmail,
-            			color: colorName,
-                  state: value.State,
-                  city: value.City,
-                  zipCode: value.ZipCode,
-                  fromStore: value.fromstore,
-                  index: count
-            		});
+                        			storeName: value.StoreName,
+                        			address: value.Address1 ,
+                        			phone: value.Phone1,
+                        			stock: stock,
+                        			emailAddress: value.StoreEmail,
+                        			color: colorName,
+                              state: value.State,
+                              city: value.City,
+                              zipCode: value.ZipCode,
+                              fromStore: value.fromstore,
+                              index: count
+                        	 });
 
             		$(".storeList").append(html);
                 count=count+1;
@@ -81,6 +80,9 @@ $(document).ready(function(){
    
   });
 
+  $("#modal-container-submit").on("shown.bs.modal",function(){
+     $("#clientEmail").focus();  
+  });
 
   $(".btnHome").click(function(){
       localStorage.flag=1;
@@ -88,7 +90,6 @@ $(document).ready(function(){
   });
 
   $(document).on("click",".btn-Email",function(e){
-
     zipValue= $(this).next().children(".zipcode").text();
     stateValue= $(this).next().children(".state").text();
     cityValue= $(this).next().children(".city").text();
@@ -97,9 +98,12 @@ $(document).ready(function(){
 
   });
 
+  $("img").on('error', function(){
+      $(this).attr("src","../img/noImage.jpg");   
+  });
+
 
   $("#sendEmailfromStore").click(function(){
-
     var toValue= addressValue + " " +cityValue+ " " + stateValue+ " " + zipValue;
     var domain = $("#selectSendDomain option:selected").text();
     var email=$("#clientEmailfromStore").val();
@@ -169,6 +173,12 @@ $(document).ready(function(){
       
   });
 
+  $("#modal-container-submit").on("shown.bs.modal",function(){
+     $("#selectDomain").val("Other");
+     $("#selectDomain").change();
+     $("#clientEmail").focus();
+  });
+
   function qs() {
           var query = window.location.search.substring(1);
           var parms = query.split('&');
@@ -186,7 +196,7 @@ $(document).ready(function(){
   function sendEmail(emailValue,fromValue,toValue){
      $.ajax({
           type: "GET",
-          url: "http://192.168.1.135/KioskoServices/Service.svc/SendMail/"+emailValue+"/"+fromValue+"/"+toValue,
+          url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SendMail/"+emailValue+"/"+fromValue+"/"+toValue,
           async: false,
           dataType: "json",
           crossdomain: true,
@@ -213,7 +223,7 @@ $(document).ready(function(){
 
     $.ajax({
             type: "GET",
-            url: "http://192.168.1.135/KioskoServices/Service.svc/SubmitEmail/"+email,
+            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SubmitEmail/"+email,
             async: false,
             dataType: "json",
             crossdomain: true,
@@ -239,17 +249,8 @@ $(document).ready(function(){
           });
   }
 
-
-
-
 });
 
 
 
 
-
-
-
-
-
-//http://192.168.1.135/KioskoServices/Service.svc/GetOtherLocations/1000001

@@ -10,16 +10,23 @@
 	<script type="text/javascript" src="../js/plugins/toastr.min.js"></script>
 	<script type="text/javascript" src="../js/plugins/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="../js/plugins/jquery.zoom.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery.hoverIntent.min.js"></script>
+	<script type="text/javascript" src="../js/plugins/jquery.mb.flipText.js"></script>
+	<script type="text/javascript" src="../js/plugins/mbExtruder.js"></script>
+	<script type="text/javascript" src="../js/plugins/underscore.min.js"></script>
+
 	
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
 	<link href="../css/style.css" rel="stylesheet">
 	<link href="../css/toastr.min.css" rel="stylesheet">
+	<link href="../css/mbExtruder.css" rel="stylesheet" >
+
 </head>
 <body class="bg">
 	<div class="container">
 		<header class="row">
 			<figure class="col-xs-2">
-				<img src="../public/images/frame/logo.jpg" class="logoCompany">
+				<img src="" class="logoCompany">
 			</figure>
 			<div class="col-xs-4">
 				<div class="nameCompany"></div>
@@ -74,6 +81,9 @@
 		</header>
 	</div>
 
+
+
+
 	<div class="sectionSock blueSock">
 		<div class="container">
 			<div class="row">
@@ -103,13 +113,15 @@
 
 						<div class="col-xs-6 lblStyle">Size:</div>
 						<div class="col-xs-6 txtStyle" id="txtSize">XL</div>
+						<span class="longDescription hide">long Description</span> 
 
+						<div id="longDescriptionContent" class="{title:'Technical Description'}" style="display: none;"></div>
 					</div>
 
 				</section>
 				<div class="col-xs-6">
 					<span class='zoom' id='zoomImage'>
-						<img src="../public/images/base/1.jpg" alt="Image Product">
+						<img src=""/>
 					</span>
 				</div>
 			</div>
@@ -120,40 +132,28 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
+					<section id="technicalDescriptionPanel" style="display: none;">
+						<div id="longDescriptionSingleImage"></div>
+					</section>	
 					<section class="carousel slide" id="myCarousel">
-			          <div class="carousel-inner">
-			                <div class="item active">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_1.jpg" class="img-responsive" alt="Image View 1"></a></div>
-			                </div>
-			                <div class="item">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_2.jpg" class="img-responsive" alt="Image View 2"></a></div>
-			                </div>
-			                <div class="item">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_3.jpg" class="img-responsive" alt="Image View 3"></a></div>
-			                </div>
-			                <div class="item">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_4.jpg" class="img-responsive" alt="Image View 4"></a></div>
-			                </div>
-			                <div class="item">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_1.jpg" class="img-responsive" alt="Image View 5"></a></div>
-			                </div>
-			                <div class="item">
-			                  <div class="col-xs-4">
-			                  <a href="#"><img src="../public/images/small/1_2.jpg" class="img-responsive" alt="Image View 6"></a></div>
-			                </div>
-			          </section>
-			          <a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
-			          <a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
-			        </div>			        
+			            <div class="carousel-inner">
+			            				                
+			            </div>
+						<a class="left carousel-control" href="#myCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+						<a class="right carousel-control" href="#myCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a> 
+						 
+			        </section>      
 				</div>
 			</div>	
 		</div>	
 	</div>
+	<script type="text/template" id="carouselTemplate">
+		<div class="item <%= active %>">
+			<div class="col-xs-4">
+				<a href="#"><img src="<%= path %>" class="img-responsive" onerror="this.src = '../img/noImage.jpg';" /></a>
+			</div>
+		</div>
+	</script>
 
 	<div class="sectionSock greenSock">
 		<div class="container">
@@ -173,8 +173,8 @@
 				<div class="col-xs-12">
 					<section class="row productsRelated">
 						<div class="col-xs-4">
-							<div class="thumbnail" id="relatedItem1">
-								<img class="relatedProductImage" src="../public/images/small/2_1.jpg" />
+							<a class="thumbnail" href="#" id="relatedItem1">
+								<img class="relatedProductImage1" src="" />
 								<span class="sku1 hide">SKU</span> <span class="size1 hide">Size</span>
 								<div class="caption">									
 									<p>
@@ -183,16 +183,14 @@
 									<p>
 										$0.00
 									</p>
-									<p class="text-center">
-										<a class="btn btnBlue" href="#" id="linkRelated1">View product</a>
-									</p>
+										<div class="btn btnBlue btnLink"  id="linkRelated1">View product</div>
 								</div>
-							</div>
+							</a>
 						</div>
 						<div class="col-xs-4">
-							<div class="thumbnail" id="relatedItem2">
-								<img class="relatedProductImage" src="../public/images/small/3_1.jpg" />
-								<span class="sku2 hide">SKU</span> <span class="size2 hide">Size</span>
+							<a class="thumbnail" id="relatedItem2" href="#">
+								<img class="relatedProductImage2" src="" />
+								<span class="sku2 hide">SKU</span> <span class="size2 hide">Size</span> 
 								<div class="caption">									
 									<p>
 										
@@ -200,15 +198,13 @@
 									<p>
 										$0.00
 									</p>
-									<p class="text-center">
-										<a class="btn btnBlue" href="#" id="linkRelated2">View product</a>
-									</p>
+										<div class="btn btnBlue btnLink" href="#" id="linkRelated2">View product</div>
 								</div>
-							</div>
+							</a>
 						</div>
 						<div class="col-xs-4">
-							<div class="thumbnail" id="relatedItem3">
-								<img class="relatedProductImage" src="../public/images/small/4_1.jpg" />
+							<a class="thumbnail" id="relatedItem3" href="#">
+								<img class="relatedProductImage3" src="" />
 								<span class="sku3 hide">SKU</span> <span class="size3 hide">Size</span>
 								<div class="caption">									
 									<p>
@@ -217,11 +213,9 @@
 									<p>
 										$0.00
 									</p> 
-									<p class="text-center">
-										<a class="btn btnBlue" href="#" id="linkRelated3">View product</a>
-									</p>
+										<div class="btn btnBlue btnLink" href="#" id="linkRelated3">View product</div>
 								</div>
-							</div>
+							</a>
 						</div>
 					</section>
 				</div>
