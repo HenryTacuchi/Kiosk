@@ -2,13 +2,18 @@ $(document).ready(function(){
 	
   var storeNo;
 	
+
 	getLanguage();
 	checkModal();
 	$("#homeScreen").click(function(){
 	  init();
 	});	
-	// Search sizes
-	$("#skuCode").keydown(function(e){
+
+	$(".btnExit").click(function(){
+		document.close();
+	});
+		// Search sizes
+		$("#skuCode").keydown(function(e){
 		  
 		  if (e.which == 13){
 			e.preventDefault();
@@ -508,4 +513,6 @@ function checkModal(){
 	}
 
 
+
 });
+

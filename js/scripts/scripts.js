@@ -149,19 +149,21 @@ $(document).ready(function(){
 		
 	}
 
+    
+  $( document ).on( "mousemove", function( event ) {
+  	var Xaxis = event.pageX;
+  	var Yaxis = event.pageY;
+		// $( "#log" ).text( "pageX: " + event.pageX + ", pageY: " + event.pageY );
+		if (Yaxis<=2) {
+			alert("Programa realizado por Retail Custom Solutions");
+			// alert("NO JODAS SAMUEL!");
+			// toastr.info("NO JODAS SAMUEL");
+
+		}
+	});
+
 });
 
 
-document.onkeydown = keydown;
-
-function keydown(evt){
-  if (!evt) evt = event;
-  if (evt.ctrlKey && evt.altKey && evt.keyCode==115){ //CTRL+ALT+F4
-    alert("CTRL+ALT+F4"); 
-  }
-  else if (evt.shiftKey && evt.keyCode == 9){ //Shif+TAB
-    alert("Shift+TAB");
-  }
-}
 
 
