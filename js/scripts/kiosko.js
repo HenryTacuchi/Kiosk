@@ -304,6 +304,7 @@ function checkModal(){
 										  error: function(error) {
 									 	  	 toastr.error("Missing Web Service IP","",{timeOut:1000});
 									 	  	 $("#toast-container").effect("bounce");
+									 	  	 window.location = "views/config.html";
 									    }	                
 			     			});
 
