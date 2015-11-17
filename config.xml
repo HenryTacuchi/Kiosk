@@ -4,8 +4,8 @@
 		id        = "com.retailcustomsolutions.reports"
 		versionCode="2"
 		version   = "2.0.2">
-		<name>RCS iReports</name>
-		<description>RCS iReports</description>
+		<name>Kiosk</name>
+		<description>Kiosk</description>
 		<author href="http://retailcs.com/" email="devmobile@realcs.com">
 		Retail Custom Solutions
 		</author>
