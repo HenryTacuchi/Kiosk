@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Kiosko.net</title>
 	<script type="text/javascript" src="js/plugins/jquery.min.js"></script>
 	<script type="text/javascript" src="js/plugins/bootstrap.min.js"></script>
@@ -10,94 +10,100 @@
 	<script type="text/javascript" src="js/plugins/toastr.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="js/plugins/jquery.hoverIntent.min.js"></script>
-	<script type="text/javascript" src="js/plugins/jquery.mb.flipText.js"></script>
-	<script type="text/javascript" src="js/plugins/mbExtruder.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery.mb.flipText.js"></script>	
+	<script type="text/javascript" src="js/plugins/jquery.stayInWebApp.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery.mCustomScrollbar.js"></script>
 
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/colors.css" rel="stylesheet">
 	<link href="css/toastr.min.css" rel="stylesheet">
 	<link href="css/jquery-ui.min.css" rel="stylesheet">
 	<link href="css/mbExtruder.css" rel="stylesheet" >
-
+	<link href="css/jquery.mCustomScrollbar.css" rel="stylesheet"/>
 </head>
-<body>
-	<img src="" class="bgBody"/>
+<body onunload="" class="bgIndex">
+	<!-- <img src="" class="bgBody"/> -->
 	
 	<div id="homeScreen" style="display: none;">
-		<img src="" class="homeScreen">
+		<img src="" class="homeScreen"/>
 	</div>
 
-	<div class="container">
-		<header class="row">
-			<figure class="col-xs-2">
-				<img src=""  class="logoCompany">
-			</figure>
-			<div class="">
-				<ol class="list-inline navbar-right col-xs-10">
-					<div class="col-xs-7">
-					</div>
-					<li class="col-xs-1 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
-						<div class="iconOption"> <img src="img/iconMail.svg" class="imgIcon"></div>	
-						<div class="lblOption">Submit</div>			
-					</li>
-					<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-hidden="true" data-backdrop="static">
-						<div class="modal-dialog">
-							<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
-								<div class="modal-header">
-									<h2 class="modal-title modalTitle text-center">
-										Please, write your email
-									</h2>
-								</div>
-								<div class="modal-body">
-									<div class="input-group">
-										<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
-										<span class="lblMessageOtherDomain">Complete your email here</span>
-  										<span class="input-group-btn areaDomain">
-  											<span class="lblArroba">@</span>
-  											<select id="selectDomain">
-  												<option value="realcs.com">realcs.com</option>
-												<option value="hotmail.com">hotmail.com</option>
-												<option value="outlook.com">outlook.com</option>
-												<option value="gmail.com">gmail.com</option>
-												<option value="Other">Other</option>											
-											</select>
-  										</span>
-									</div>									
-								</div>
-								<div class="modal-footer">																
-									<button type="button" class="btn" id="submitClientEmail">
-										Send
-									</button>
-									<button type="button" class="btn" id="cancelClientEmail">
-										Cancel
-									</button>
-								</div>
-							</div>							
-						</div>						
-					</div>
-					<li class="col-xs-1 text-center btnHome">
-						<div class="iconOption"><img src="img/iconHome.svg" class="imgIcon"></div>
-						<div class="lblOption">Home</div>		
-					</li>
-					<li class="col-xs-1 text-center btnKey">
-						<div class="iconOption"> <img src="img/iconKeyLock.svg" class="imgIcon"></div>
-						<div class="lblOption">Key</div>
-					</li>
-					<li class="col-xs-1 text-center btnConfig hide" onclick="location.href = 'views/config.html'">
-						<div class="iconOption"><img src="img/iconConfig.svg" class="imgIcon"></div>
-						<div class="lblOption">Config</div>
-					</li>
-				</ol>			
-			</div>
-		</header>
+	<div class="headerColor">
+		<div class="container">
+			<header class="row">
+				<figure class="col-xs-2">
+					<img src=""  class="logoCompany">
+				</figure>
+				<div class="optionsList">
+					<ol class="list-inline navbar-right col-xs-10">
+						<div class="col-xs-7">
+						</div>
+						<li class="col-xs-1 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
+							<div class="iconOption"> <img src="img/iconMail.svg" class="imgIcon"></div>	
+							<div class="lblOption">Submit</div>
+							<label class="coolMessage">Sign up to win something cool!</label>			
+						</li>
+						<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-hidden="true" data-backdrop="static">
+							<div class="modal-dialog">
+								<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
+									<div class="modal-header">
+										<h2 class="modal-title modalTitle text-center">
+											Please, write your email
+										</h2>
+									</div>
+									<div class="modal-body">
+										<div class="input-group">
+											<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
+											<span class="lblMessageOtherDomain">Complete your email here</span>
+	  										<span class="input-group-btn areaDomain">
+	  											<span class="lblArroba">@</span>
+	  											<select id="selectDomain">
+	  												<option value="realcs.com">realcs.com</option>
+													<option value="hotmail.com">hotmail.com</option>
+													<option value="outlook.com">outlook.com</option>
+													<option value="gmail.com">gmail.com</option>
+													<option value="Other">Other</option>											
+												</select>
+	  										</span>
+										</div>									
+									</div>
+									<div class="modal-footer">																
+										<button type="button" class="btn" id="submitClientEmail">
+											Send
+										</button>
+										<button type="button" class="btn" id="cancelClientEmail">
+											Cancel
+										</button>
+									</div>
+								</div>							
+							</div>						
+						</div>
+						<li class="col-xs-1 text-center btnHome">
+							<div class="iconOption"><img src="img/iconHome.svg" class="imgIcon"></div>
+							<div class="lblOption">Home</div>		
+						</li>
+						<li class="col-xs-1 text-center btnKey">
+							<div class="iconOption"> <img src="img/iconKeyLock.svg" class="imgIcon"></div>
+							<div class="lblOption">Key</div>
+						</li>
+						<li class="col-xs-1 text-center btnConfig hide" onclick="location.href = 'views/config.html'">
+							<div class="iconOption"><img src="img/iconConfig.svg" class="imgIcon"></div>
+							<div class="lblOption">Config</div>
+						</li>
+					</ol>			
+				</div>
+			</header>
+		</div>
 	</div>
+		
 
 	<div class="sectionSock ">
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12 text-center">
 
-					<h1 id="lblWelcome">Welcome to RCS</h1>
+					<h1 id="lblWelcome">&nbsp;</h1>
 				</div>
 			</div>	
 		</div>	
@@ -134,7 +140,7 @@
 							<h1>Select your size</h1>
 
 							<div class="form-group">
-								<select id="sizeOptions" class="form-control">
+								<select id="sizeOptions" class="form-control ">
 									
 								</select>
 							</div>
@@ -153,7 +159,7 @@
 						<div class="iconOption"><img src="img/iconSizeChart.svg" class="imgIcon"></div>
 						<div class="lblOption">Size Chart</div>
 					</div>
-					<div class="col-xs-4 text-center btnRefresh btn noContent" onClick="window.location.reload()">
+					<div class="col-xs-4 text-center btnRefresh btn noContent" >
 
 						<div class="iconOption"><img src="img/iconRefresh.svg" class="imgIcon"></div>
 						<div class="lblOption">Refresh</div>
@@ -219,6 +225,31 @@
 		</div>						
 	</div>
 
+	<!-- Modal for Go to Config -->
+	<div class="modal modal-vcenter fade" id="modal-settings" role="dialog" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
+				<div class="modal-header">
+					<h2 class="modal-title modalTitle text-center">
+						You must first set your configuration!
+					</h2>
+				</div>
+				<div class="modal-body text-center">
+					<button type="button" class="btn" id="goSettings">
+						Go
+					</button>	
+				</div>
+			</div>							
+		</div>						
+	</div>
+
+	<div class='loader hide'>
+	  <div class='circle'></div>
+	  <div class='circle'></div>
+	  <div class='circle'></div>
+	  <div class='circle'></div>
+	  <div class='circle'></div>
+	</div>
 
 </body>
 </html>

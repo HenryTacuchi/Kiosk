@@ -1,7 +1,9 @@
 $(document).ready(function(){
 
+	$(".loader").removeClass("hide").addClass("show");
 	var qsParm = new Array();
 	var afterHomePage;
+	var opened;	 
 	readParameters();
 	init();
 		$.ajax({
@@ -10,10 +12,13 @@ $(document).ready(function(){
           async: false,
           dataType: "json",
           crossdomain: true,
+          complete:function(){
+          	//setTimeout(function(){$(".loader").removeClass("show").addClass("hide");},3000);        	     	
+          },
           success:function(result){
           	var data = result.GetSKUInfoResult;
           	var currencySymbol;
-          	$.each(data, function( index, value) {
+          	$.each(data, function( index, value){
 						
 							// Retrieve product information
 							var price= (parseFloat(value.RetailPrice)).toFixed(2);
@@ -26,18 +31,36 @@ $(document).ready(function(){
           			currencySymbol= "$ ";          			
           		} 
           		$("#txtPrice").text(currencySymbol+ price);
+          		var units = (parseFloat(value.OnHandQty)).toFixed(0);
+          		var unit = units.toString();
           		
-          		if(value.OnHandQty > 0){
-          			$("#txtStock").text("IN STOCK").addClass("available");          			
-          		}
-          		else{
-          			$("#txtStock").text("OUT STOCK").addClass("no-available");
-          		}
-          		$("#txtUnits").text(value.OnHandQty);
-          		$("#txtColor").text(value.colorName);
-          		$("#txtSize").text(value.SizeCode);
-          		$("#longDescriptionContent").text(value.LongDescription);
-          		$("#longDescriptionSingleImage").text(value.LongDescription);
+          		if (localStorage.current_lang == "es"){
+                    if (value.OnHandQty > 0) {
+                        $("#txtStock").text("EN STOCK, "+ unit +" unid." ).addClass("available");
+                    }
+                    else {
+                        $("#txtStock").text("SIN STOCK").addClass("no-available");
+                    }
+                    
+                    //$("#txtUnits").text(unit +" unid.");
+                        
+              }
+              else {
+                   if (value.OnHandQty > 0) {
+                        $("#txtStock").text("IN STOCK, "+ unit+" units" ).addClass("available");
+                    }
+                   else {
+                        $("#txtStock").text("OUT STOCK").addClass("no-available");
+                    }                        
+                    //$("#txtUnits").text(unit+" units");
+             } 
+             	var title;     		
+              if (localStorage.current_lang == "es") { title= "<h3>Descripci\u00f3n T\u00e9cnica<h3>";}     
+              else{ title= "<h3>Technical Description<h3>";}          					
+             	 
+             	;
+          		$("#longDescriptionContent").append(title+value.LongDescription);
+          		//$("#longDescriptionSingleImage").text(value.LongDescription);
 
           		// Retrieve images
           		images=value.ImagePath;
@@ -46,29 +69,36 @@ $(document).ready(function(){
 	          		$.each(images, function( index, value) {
 	          				if(index==0){
 		          				$("#zoomImage").children().attr("src",value.Path);
-		          					
+		          					path= value.Path;
+				          				var template= _.template($("#carouselTemplate").html());
+				            			var html= template ({
+									            				active: "active",
+									            				path: path 
+									            			});            	
+				            			$(".carousel-inner").append(html);		          					
 		          			}
 		          			else{
-				          				var active, path;
-					          				if (index==1){
-					          					active="active";
-					          				}	
-					          				else{
-					          					active="";
-					          				}
+				          				//var active, path;
+					          				//if (index==1){
+					          					//active="active";
+					          				//}	
+					          				//else{
+					          				//	active="";
+					          				//}
 				          			  //var exists= ImageExist(value.Path);
 				          				//if (exists == true) {path= value.Path;}
 			          					//else{path= "../img/noImage.jpg"}		          				
 			          					path= value.Path;
-				          				var template= _.template($("#carouselTemplate").html());
+			          					var template;
+			          					template= _.template($("#carouselTemplate").html());			          							          				
 				            			var html= template ({
-									            				active: active,
+									            				active: "active",
 									            				path: path 
 									            			});            	
 				            			$(".carousel-inner").append(html);
 		          			}  
 		          		});
-		          	startCarrousel();
+		          	//startCarrousel();
 
 	          	}
 	          	else if(images.length==0) {
@@ -78,7 +108,6 @@ $(document).ready(function(){
 		          		$("#myCarousel").hide();
 		          		$("#technicalDescriptionPanel").show();
 		         	}
-
           		// Retrieve related products
           		$.ajax({
 		            type: "GET",
@@ -104,35 +133,45 @@ $(document).ready(function(){
 			            else{
 			            	$(".productsRelated").hide();
 			            	$(".messageResultProducts").show();
-			            }
+			            }		           
 
           			},
           			error: function(error) {
 			 	  				toastr.error("error = " + error.status +" "+error.statusText);
+			 	  				
 			    			}	 
 
 							});  
 
-						});              		  	
+						}); 
+						//setTimeout(function(){$(".loader").removeClass("show").addClass("hide");},1000);                		  	
  					},       					
 				  error: function(error) {
-			 	  	toastr.error("error = " + error.status +" "+error.statusText);
-			    }	                
+			 	  	toastr.error("error = " + error.status +" "+error.statusText);			 	  
+			    }
+			                
   });
 	
 	$(".btnCheckLocals").click(function(){
-		window.location = "store_list.html?sku="+qsParm["sku"]+"&store="+qsParm["store"];
+		 $(".loader").removeClass("hide").addClass("show");
+     window.location = "store_list.html?sku=" + qsParm["sku"] + "&store=" + qsParm["store"]; 
 	});
 
 	$("img").on('error', function(){
-			$(this).attr("src","../img/noImage.jpg");		
+		if (localStorage.current_lang == "es") {
+        $(this).attr("src", "../img/noImageEs.jpg");            
+    }
+    else {
+        $(this).attr("src", "../img/noImage.jpg");
+    }	
 	});
 
 	$(".btnReturn").click(function(){
 		var currentPage = location.href;
 		var rowid, count;
 		if (afterHomePage==currentPage){
-		localStorage.flag=2;		
+		localStorage.flag=2;
+		window.location= "../index.html"
 		}
 		window.history.back();
 		
@@ -160,13 +199,10 @@ $(document).ready(function(){
 		$('#zoomImage').zoom({ on:'toggle' });
 
 	});
-
-  function ImageExist(url) 
-	{
-   var img = new Image();
-   img.src = url;
-   return img.height != 0;
-	}
+ 
+ $(".thumbnail").click(function(){
+   $(".loader").removeClass("hide").addClass("show");    
+ });
 
 	function startCarrousel(){
 		$('#myCarousel').carousel({
@@ -191,51 +227,30 @@ $(document).ready(function(){
 		   }
 	 	});
 	}	
-
 		
 	
- $("#submitClientEmail").click(function(){
-			var domain = $("#selectDomain option:selected").text();
-			var email=$("#clientEmail").val();
-			var errorDomain= (email.match(/.com/g) || []).length;
-		  var errorSintax= (email.match(/@/g) || []).length;
-		  var checkDom = email.lastIndexOf("@");
-			var resultDom = email.substring(checkDom + 1);
-			var whitespaces = email.lastIndexOf(" ");
-		  if(domain=="Other"){
-					if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==1) && (resultDom!=email && resultDom.trim().length>0 )){
-						submitEmail(email);
-						$("#clientEmail").val("");
-					}
-					else{
-						toastr.info("Please, enter a valid email!","",{timeOut: 1000});
-						$("#toast-container").effect("bounce");
-					}
-				}	
-				else{
-					email=email+"@"+domain
-					if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==0)){
-						submitEmail(email);
-					}
-					else{
-						toastr.info("Please, enter a valid email!","",{timeOut: 1000});
-						$("#toast-container").effect("bounce");
-					}
-
-				}	
-			
-	});
 
  	$("#modal-container-submit").on("shown.bs.modal",function(){
   	 $("#selectDomain").val("Other");
   	 $("#selectDomain").change();
   	 $("#clientEmail").focus();
-  });
+  	});
+
+  $("#longDescriptionContent").click(function(){
+		  if (localStorage.opened!=1) $("#longDescriptionContent").closeMbExtruder();
+		  localStorage.opened=0;
+		 		  
+	});
+  $(".btnLongDescription").click(function(){		  
+			localStorage.opened=1;
+			$(".flap").click();		 
+
+  })
 
 	$("#longDescriptionContent").buildMbExtruder({
           positionFixed:true,
           width:720,
-          sensibility:800,
+          sensibility:1000,
           position:"right", // left, right, bottom
           extruderOpacity:1,
           flapDim:100,
@@ -247,8 +262,13 @@ $(document).ready(function(){
           autoCloseTime:0, // 0=never
           slideTimer:500
   });
-  
- $(".flapLabel").text("Technical Description");
+
+if(localStorage.current_lang == "es"){
+	 $(".flapLabel").text("Descripci\u00F3n T\u00E9cnica");
+}
+else{
+	$(".flapLabel").text("Technical Description");
+}
 
 	function readParameters() {
 		    var query = window.location.search.substring(1);
@@ -278,37 +298,17 @@ $(document).ready(function(){
 
 	}
 
-	function submitEmail(email){
-
-		$.ajax({
-            type: "GET",
-            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SubmitEmail/"+email,
-            async: false,
-            dataType: "json",
-            crossdomain: true,
-            success:function(result){
-            	$.each(result, function( index, value) {
-							 	if (value==true){
-									toastr.success("Successful subscription!");
-									$("#toast-container").effect("slide","slow");
-									$("#modal-container-submit").modal("hide");
-								}
-								else{
-									toastr.error("Invalid email or it is already subscripted!");
-									$("#toast-container").effect("bounce");
-
-								}
-							});
-          	
-            },
-            error:function(error) {
-				 	  	 toastr.error("Try again please!");
-				 	  	$("#toast-container").effect("bounce");
-				 	 	}
-					});
-	}
-
+	
 	
 });
 
+$(window).load(function(){
+	$(".loader").removeClass("show").addClass("hide");
+    $(".extruder-content").mCustomScrollbar({
+    	theme:"rounded-dark",
+    	live: "on",
+    	scrollButtons:{ enable: true }
+    });	
+    				            
+});
 

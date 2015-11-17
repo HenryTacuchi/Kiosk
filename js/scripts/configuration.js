@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
-
   loadData();
   checkPassword();
+
 
 	$("#saveConfig").click(function(){
 		localStorage.flag=1;
@@ -11,55 +11,65 @@ $(document).ready(function(){
 
 	$("#btnConfiguration").click(function(){
 		var storeNo= $("#storeNo").val();
-		var webIP= $("#webServices").val();	
+		var webIp= $("#webServices").val();	
+		var storeName= $("#storeName").val();
 		var email= $("#adminEmail").val();		
 		var checkEmail= validateEmail();
-		if(storeNo.length>0 && webIP.length>0 && email.length>0 && checkEmail != -1 ){
-			saveConfiguration(storeNo.trim(),webIP.trim(),checkEmail.trim());
+		if(storeNo.length>0 && webIp.length>0 && storeName.length>0 && email.length>0 && checkEmail != -1 ){
+			saveConfiguration(storeNo.trim(),webIp.trim(),checkEmail.trim(),storeName.trim());
+			
+			$(".sectionConfig").effect("drop");		
+
+			var template= _.template($("#sectionSockTemplate").html());
+				            			var html= template ({								            				
+									            			});            	
+		  $(".showSectionIP").append(html);		          			
+			$(".sectionIP").delay(100).show( "drop", {direction: "down"},"fast");
+			checkPassword();
 
 		}
 		else {
 			if (storeNo.length<0){$("#storeNo").focus();}
-			else if (webIP.length<0){$("#webServices").focus();}
+			else if (webIp.length<0){$("#webServices").focus();}
+			else if (storeName.length<0) {$("#storeName").focus();}
 			else {$("#adminEmail").focus();}
-			toastr.info("There are some required values that are empty!","",{timeOut: 1000});
-			$("#toast-container").effect("bounce");	
+			if (localStorage.current_lang == "es") { toastr.info("Hay algunos campos requeridos incompletos!", "", { timeOut: 1000 }); } else { toastr.info("There are some required values that are empty!", "", { timeOut: 1000 }); }
+			$("#toast-container").effect("bounce");
 		}
 		
+
 	});
 
-
-	$("#btnPassword").click(function(){
+	$(document.body).on("click", "#btnPassword" ,function(){
+	//$("#btnPassword").click(function(){
 		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 		db.readTransaction(function (tx) {
 				tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
 					var count = results.rows.length;
 		      if(count>0){
-		     	// Validate old password
-		     		var oldPass=$("#oldPassword").val(); 
-		     		if (results.rows.item(0).Password== oldPass){
-		     			var newPass=$("#newPassword").val();
-		     			var repPass=$("#newPasswordRepeat").val(); 
-		     			if (newPass==repPass){savePassword(newPass.trim()); $("#invalidPassword").slideUp("fast");}
-		      		else{
-			      		toastr.info("Please, check your password and confirmation again!","",{timeOut: 1000});
-						 	  $("#toast-container").effect("bounce");
-						 	  $("#newPasswordRepeat").focus();
-						 	}
-		      	}
-		      	else{
+		     			// Validate old password
+			     		var oldPass=$("#oldPassword").val(); 
+			     		if (results.rows.item(0).Password== oldPass){  
+			     			var newPass=$("#newPassword").val();
+			     			var repPass=$("#newPasswordRepeat").val(); 
+			     			if (newPass==repPass){savePassword(newPass.trim()); $("#invalidPassword").slideUp("fast");$(".sectionIP").effect("drop");}
+			      		else{
+				      		if (localStorage.current_lang == "es") { toastr.info("La confirmaci\u00f3n de la contrasena no es correcta!", "", { timeOut: 1000 }); } else { toastr.info("Please, check your password and confirmation again!", "", { timeOut: 1000 }); }
+			     			  $("#toast-container").effect("bounce");
+							    $("#newPasswordRepeat").focus();
+						  	}						
+		        	}
+		     			else{
 		      		$("#invalidPassword").show().effect("slide").addClass("yellow");
-
-		      	}
-		     			
+		     		}				     			
 		      }
 		      else{
 		      // Check both password new one and repeated one
 		      	var newPass=$("#newPassword").val(); 	
 		      	var repPass=$("#newPasswordRepeat").val(); 
-		      	if (newPass==repPass){savePassword(newPass.trim());}
+		      	if (newPass==repPass){savePassword(newPass.trim());$(".sectionIP").effect("drop");}  
 		      	else{
-		      		toastr.info("Please, check your password and confirmation again!","",{timeOut: 1000});
+		      		if (localStorage.current_lang == "es") { toastr.info("La confirmaci\u00f3n de la contrasena no es correcta!", "", { timeOut: 1000 }); } else { toastr.info("Please, check your password and confirmation again!", "", { timeOut: 1000 }); }
 					 	  $("#toast-container").effect("bounce");
 					 	  $("#newPasswordRepeat").focus();
 		      	}
@@ -94,7 +104,8 @@ $(document).ready(function(){
 						var count = results.rows.length;
 			      if(count>0){
 			      		$("#storeNo").val(results.rows.item(0).StoreNo);
-								$("#webServices").val(results.rows.item(0).WebServiceIP);	
+								$("#storeName").val(localStorage.storeName);
+								$("#webServices").val(results.rows.item(0).WebServiceIP);
 								var email= results.rows.item(0).AdminEmail;
 								var checkDom = email.lastIndexOf("@");
       					var resultDom = email.substring(checkDom + 1);
@@ -118,7 +129,7 @@ $(document).ready(function(){
 
 	}
 
-	function saveConfiguration(storeNo,webIP,email){
+	function saveConfiguration(storeNo,webIp,email,storeName){
 	
 		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
     db.transaction(function (tx) {  
@@ -127,17 +138,19 @@ $(document).ready(function(){
 	   			function(tx,e){	}
 				);
 		});
+		localStorage.storeName="null";
     db.transaction(function (tx) {  
-	   		tx.executeSql("INSERT INTO KioskPreferences (StoreNo,WebServiceIP,AdminEmail ) VALUES (?,?,?)",[storeNo,webIP,email],
+	   		tx.executeSql("INSERT INTO KioskPreferences (StoreNo,WebServiceIP,AdminEmail ) VALUES (?,?,?)",[storeNo,webIp,email],
 	   			function(tx,success){  	
-	   					toastr.success("Configuration set up successfully!","",{timeOut: 1000});
-							$("#toast-container").effect("slide","slow");   						},
+	   					if (localStorage.current_lang == "es") { toastr.success("Configuraci\u00f3n realizada exitosamente!", "", { timeOut: 1000 }); } else { toastr.success("Configuration set up successfully!", "", { timeOut: 1000 }); }
+	    				$("#toast-container").effect("slide","slow");   						},
 	   			function(tx,e){	
-	   					toastr.error("Try again please!","",{timeOut: 1000});
-					 	  $("#toast-container").effect("bounce");
+	   					if (localStorage.current_lang == "es") { toastr.info("Int\u00e9ntelo nuevamente, por favor"); } else { toastr.info("Try again, please"); }
+                $("#toast-container").effect("bounce");
 	   			}
 				);
 		});
+		localStorage.storeName=storeName;
 	}
 
 	function savePassword(password){
@@ -152,12 +165,12 @@ $(document).ready(function(){
     db.transaction(function (tx) {  
    		tx.executeSql("INSERT INTO Security (Password) VALUES (?)",[password],
    			function(tx,success){
-   				toastr.success("Password set up successfully!","",{timeOut: 1000});
-					$("#toast-container").effect("slide","slow");   			
+   			 	if (localStorage.current_lang == "es") { toastr.success(" Asignaci\u00f3n de contrase\u00f1a exitosamente!", "", { timeOut: 1000 }); } else { toastr.success("Password set up successfully!", "", { timeOut: 1000 }); }
+   				$("#toast-container").effect("slide","slow");     			
    			},
    			function(tx,e){	
-   				toastr.error("Try again please!","",{timeOut: 1000});
-					$("#toast-container").effect("bounce");
+   				if (localStorage.current_lang == "es") { toastr.error("Int\u00e9ntelo nuevamente, por favor!"); } else { toastr.error("Try again please!"); }
+          $("#toast-container").effect("bounce");
    			}
 			);
 		});

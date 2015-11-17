@@ -1,22 +1,20 @@
 $(document).ready(function(){
 	
+  $(".loader").removeClass("show").addClass("hide"); 
   var storeNo;
-	
-
+	a= localStorage.webIp;
+	b= localStorage.logo;
 	getLanguage();
 	checkModal();
 	$("#homeScreen").click(function(){
 	  init();
 	});	
 
-	$(".btnExit").click(function(){
-		document.close();
-	});
 		// Search sizes
 		$("#skuCode").keydown(function(e){
 		  
-		  if (e.which == 13){
-			e.preventDefault();
+		  if (e.which == 10 || e.which == 13){
+			e.preventDefault();		
 
 			var sku= $("#skuCode").val();
 			 $.ajax({
@@ -30,7 +28,7 @@ $(document).ready(function(){
               	options.find('option').remove().end();
               	var selected = 0;
               	var data= result.LoadSizesResult;
-              	if (data!=null){
+              	if (data!=null && data.length ){
 	              	$.each(data, function( index, value) {
 										options.append($("<option></option>").attr("value",index).text(value.sizecode)); 
 										if (value.selected == true ){
@@ -38,30 +36,32 @@ $(document).ready(function(){
 										}
 									}); 
 	              	options.val(selected);
+                $('#sizeOptions').selectmenu("destroy");
+					    	$('#sizeOptions').selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" ); 
+					    	$('#sizeOptions').selectmenu("enable"); 
+
                 }
                 else{
-                	toastr.info("Product not found","",{timeOut:1000});
-                	$("#toast-container").effect("bounce");
+                	if (localStorage.current_lang == "es") { toastr.info("Producto no encontrado", "", { timeOut: 1000 }); } else { toastr.info("Product not found", "", { timeOut: 1000 }); }
+                  $("#toast-container").effect("bounce");
                 }
-              	//$("#animate").attr("src","file://192.168.1.154/Web%20Design/KIOSKO.NET/okey.gif");
-              	//$("#paisana").attr("src","http://retailcs.com/paisana.jpg");
- 						 	
+                						 	
      					},       					
 						  error: function(error) {
-					 	  	 toastr.error("Missing product information","",{timeOut:1000});
-					 	  	 $("#toast-container").effect("bounce");
+					 	  	 if (localStorage.current_lang == "es") { toastr.info("Es requerido el c\u00f3digo del producto", "", { timeOut: 1000 }); } else { toastr.error("Missing product information", "", { timeOut: 1000 }); }
+                 $("#toast-container").effect("bounce");
 					    }	                
 	     });
-			
+			return false;
 		}	
 	});
 		
-	$(document).keydown(function(e){
-		  
-		  if (e.which == 13) e.preventDefault();
-	});
-
 	$("#modal-container-submit").on("shown.bs.modal",function(){
+  	 $("#selectDomain").val("Other");
+  	 $("#selectDomain").change();
+  	 $("#clientEmail").focus();
+  });
+	$("#modal-key").on("shown.bs.modal",function(){
   	 $("#selectRecoveryDomain").val("Other");
   	 $("#selectRecoveryDomain").change();
   	 $("#clientEmail").focus();
@@ -77,12 +77,23 @@ $(document).ready(function(){
  		 localStorage.flag=1;	
      window.location = "index.html";
   });
+  $(".btnRefresh").click(function(){
+ 	localStorage.flag=2;
+    var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+      db.transaction(function (tx) {  
+        tx.executeSql("DELETE FROM ProductSearched",[],function(tx,success){
+           window.location = "index.html";
+        },null);
+      });
+   
+  });
+  
 	$(".btnContinue").click(function(){
-		var sku= $("#skuCode").val();
+		$(".loader").removeClass("hide").addClass("show");
+    var sku= $("#skuCode").val();
 		var size = $("#sizeOptions option:selected").text();
 		var index= $("#sizeOptions").val();
-		if (sku.length!=0 && size!=""){
-			
+		if (sku.length!=0 && size!=""){			
 			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 			db.transaction(function (tx) {  
 		   		tx.executeSql("DELETE FROM ProductSearched");
@@ -96,47 +107,41 @@ $(document).ready(function(){
 			
 		}
 		else{
-				toastr.info("Make sure to complete all the entries","",{timeOut: 1000});
-				$("#toast-container").effect("bounce");
+			if (localStorage.current_lang == "es") { toastr.info("Aseg\u00farese de llenar todos los campos", "", { timeOut: 1000 }); } else { toastr.info("Make sure to complete all the entries", "", { timeOut: 1000 }); }
+      $("#toast-container").effect("bounce");
+      $(".loader").removeClass("show").addClass("hide");
 		}	
 
 	});
 
 	$(".btnSizeChart").click(function(){
-		window.location = "views/size_chart.html";
-	});
+		var sku= $("#skuCode").val();
+		var size = $("#sizeOptions option:selected").text();
+		var index= $("#sizeOptions").val();			
+			var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
+			db.transaction(function (tx) {  
+		   		tx.executeSql("DELETE FROM ProductSearched");
+			 	});	
+			
+					db.transaction(function (tx) {  
+			   		tx.executeSql("INSERT INTO ProductSearched (Sku, Size) VALUES (?,?)",[sku,index],
+			   			function(tx,success){
+			   				if(sku.length>0)  window.location = "views/size_chart.html";
+			   			 	else{
+			   			 		db.transaction(function (tx) {  
+		   							tx.executeSql("DELETE FROM ProductSearched",[],function(tx,success){window.location = "views/size_chart.html";},function(tx,e){});
+			 						});	
 
-	
-	$("#submitClientEmail").click(function(){
-		var domain = $("#selectDomain option:selected").text();
-		var email=$("#clientEmail").val();
-		var errorDomain= (email.match(/.com/g) || []).length;
-	  var errorSintax= (email.match(/@/g) || []).length;
-	  var checkDom = email.lastIndexOf("@");
-		var resultDom = email.substring(checkDom + 1);
-		var whitespaces = email.lastIndexOf(" ");
-	  if(domain=="Other"){
-				if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==1) && (resultDom!=email && resultDom.trim().length>0 )){
-					submitEmail(email);
-					$("#clientEmail").val("");
-				}
-				else{
-					toastr.info("Please, enter a valid email!","",{timeOut: 1000});
-					$("#toast-container").effect("bounce");
-				}
-			}	
-			else{
-				email=email+"@"+domain
-				if(email.length!=0 && whitespaces==-1 && (errorDomain<=1 && errorSintax==0)){
-					submitEmail(email);
-				}
-				else{
-					toastr.info("Please, enter a valid email!","",{timeOut: 1000});
-					$("#toast-container").effect("bounce");
-				}
-
-			}	
+			   			 	} 
+			   			
+			   			},
+			   			function(tx,e){ console.log(e);}
+						);
+		 		 });	
 		
+
+
+					
 	});
 
 
@@ -145,39 +150,7 @@ $(document).ready(function(){
 	    $("#submitClientEmail").click();
 	  }
 	});
-
-	
-	function submitEmail(email){
-
-		$.ajax({
-            type: "POST",
-            url: "http://"+ localStorage.webIp + " /KioskoServices/Service.svc/SubmitEmailPost",
-            async: false,
-            contentType: "application/json",
-            data: JSON.stringify({"email": email}),
-            crossdomain: true,
-            success:function(result){
-            	 	if (result==true){
-									toastr.success("Successful subscription!");
-									$("#toast-container").effect("slide","slow");
-									$("#modal-container-submit").modal("hide");
-								}
-								else{
-									toastr.error("Invalid email or it is already subscripted!");
-									$("#toast-container").effect("bounce");
-
-								}
-						
-          	
-            },
-            error:function(error) {
-				 	  	 toastr.error("Try again please!");
-				 	  	$("#toast-container").effect("bounce");
-				 	 	}
-					});
-	}
-
-
+		
 function checkModal(){
 	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 	db.readTransaction(function (tx) {
@@ -200,6 +173,8 @@ function checkModal(){
    														 $("#skuCode").trigger(e);
    														 $("#sizeOptions").val(index);
    														 $("#skuCode").focus();
+   														 $(".loader").removeClass("show").addClass("hide"); 
+
 							      		      }
 								   				},null);
 							   				});
@@ -211,13 +186,13 @@ function checkModal(){
 							      else{
 							      	init();
 							      	loadImages();
-							      	$("#homeScreen").show();
+							      	$("#homeScreen").show();						      	
 							      }
 							    }
 							    else{
 							     	init();
 							      loadImages();
-							    	$("#homeScreen").show();
+							    	$("#homeScreen").show();	
 							    }
 					      		      					      	
 			      }
@@ -264,6 +239,7 @@ function checkModal(){
 
 		      	localStorage.webIp= results.rows.item(0).WebServiceIP;
 		      	storeNo= results.rows.item(0).StoreNo;
+		      	localStorage.storeNo=storeNo;
 		      	localStorage.background= results.rows.item(0).BackgroundImage;
 		     		localStorage.logo= results.rows.item(0).LogoImage;
 		   			localStorage.home= results.rows.item(0).HomeImage;
@@ -271,14 +247,18 @@ function checkModal(){
 		     		localStorage.flag = 1;
 
 		     		db.readTransaction(function (tx) {
-					   	tx.executeSql("SELECT * FROM Security", [], function (tx, results) {
+					   	tx.executeSql("SELECT                                              * FROM Security", [], function (tx, results) {
 					      var count = results.rows.length;					      
-					      if(count==0 || (storeNo==null || localStorage.webIp == "null" || localStorage.email == "null") ){
+					      if(count==0 || (storeNo==null || localStorage.webIp == "null" || localStorage.email == "null" || (typeof localStorage.storeName=="undefined"|| localStorage.storeName=="null")) ){
 						      window.location= "views/config.html";	
 			          }	       
 							     	
 					   	}, null);
 						});
+						if(localStorage.current_lang == "es"){$('#lblWelcome').text( " Bienvenido a "+ localStorage.storeName );} 
+						else{$('#lblWelcome').text( " Welcome to "+ localStorage.storeName );}					
+
+						
 
 		      	if(localStorage.background== "null" || localStorage.logo== "null" || localStorage.home== "null"){
 		      			var bg,logo,home;
@@ -302,9 +282,9 @@ function checkModal(){
 				 						 	
 				     					},       					
 										  error: function(error) {
-									 	  	 toastr.error("Missing Web Service IP","",{timeOut:1000});
-									 	  	 $("#toast-container").effect("bounce");
-									 	  	 window.location = "views/config.html";
+									 	  	 if (localStorage.current_lang == "es") { toastr.error("IP del servicio no encontrada", "", { timeOut: 1000 }); } else { toastr.error("Missing Web Service IP", "", { timeOut: 1000 }); }
+                         $("#toast-container").effect("bounce");
+                         window.location = "views/config.html"
 									    }	                
 			     			});
 
@@ -371,6 +351,9 @@ function checkModal(){
 		 	$("#modal-key").modal("show");
   });
 
+
+  
+
   $("#btnRecoverySend").click(function(){
 		 // Delete all information from dataBase
 		 var validatedEmail= validateEmail();
@@ -382,15 +365,18 @@ function checkModal(){
 				     if(count>0){
 					 		adminEmail= results.rows.item(0).AdminEmail;
 					 		count=0;
-						 		if(validatedEmail==adminEmail){
-									 
+						 		if(validatedEmail==adminEmail){									 
+									 localStorage.logo= "null";
+									 localStorage.background= "null";
+									 localStorage.home= "null";
+
 									 db.transaction(function (tx) {  
 								   		tx.executeSql("DROP TABLE KioskPreferences",[],function(){
 								   			count++; 
 								   				if(count==4){
 									   				 toastr.success("Restoration complete!");
 										 				 $("#toast-container").effect("slide","slow");
-										 				 location.reload();
+										 				 $(".btnHome").click();
 									   			}
 								   			},null);
 								   		
@@ -401,7 +387,7 @@ function checkModal(){
 								   				if(count==4){
 									   				 toastr.success("Restoration complete!");
 										 				 $("#toast-container").effect("slide","slow");
-										 				 location.reload();
+										 				 $(".btnHome").click();
 									   			}
 								   			},null);
 								   
@@ -412,7 +398,7 @@ function checkModal(){
 								   				if(count==4){
 									   				 toastr.success("Restoration complete!");
 										 				 $("#toast-container").effect("slide","slow");
-										 				 location.reload();
+										 				 $(".btnHome").click();
 									   			}
 								   			},null);
 								   	
@@ -421,9 +407,9 @@ function checkModal(){
 								   		tx.executeSql("DROP TABLE History",[],function(){
 								   			count++;
 									   			if(count==4){
-									   				 toastr.success("Restoration complete!");
-										 				 $("#toast-container").effect("slide","slow");
-										 				 location.reload();
+									   				  if (localStorage.current_lang == "es") { toastr.success("Restauracion completada!"); } else { toastr.success("Restoration complete!"); }
+                            $("#toast-container").effect("slide", "slow");
+										 				 $(".btnHome").click();
 									   			}
 								   			},null);
 								   	
@@ -432,14 +418,14 @@ function checkModal(){
 									 								
 								}	
 								else{
-										toastr.error("Try again please!");
-				 	  				$("#toast-container").effect("bounce");
+										if (localStorage.current_lang == "es") { toastr.error("Int\u00e9ntelo nuevamente, por favor!"); } else { toastr.error("Try again please!"); }
+                $("#toast-container").effect("bounce");
 								}
 					   
 					   }
 					   else{
-						   	toastr.info("No exist an email in the database!");
-					 	  	$("#toast-container").effect("bounce");
+						   if (localStorage.current_lang == "es") { toastr.info("No existe un email en la base de datos!"); } else { toastr.info("No exist an email in the database!"); }
+            $("#toast-container").effect("bounce");
 					   }	       
 						     	
 				   		}, null);
@@ -471,22 +457,22 @@ function checkModal(){
 		  						$(".btnConfig").addClass("hide");
 		  						$("#passwordKey").val("");
 		  						$("#modal-key").modal("hide");
-  								toastr.success("Lock configuration successfully!");
-									$("#toast-container").effect("slide","slow");
+  								 if (localStorage.current_lang == "es") { toastr.success("Bloqueo administrativo exitoso!"); } else { toastr.success("Lock configuration successfully!"); }
+									 $("#toast-container").effect("slide", "slow");
 		  					}
 		  					else{
 		  						$(".btnConfig").show();
 		  						$(".btnConfig").removeClass("hide");
 		  						$("#modal-key").modal("hide");
 		  						$("#passwordKey").val("");
-  								toastr.success("Unlock configuration successfully");
-									$("#toast-container").effect("slide","slow");
+  								if (localStorage.current_lang == "es") { toastr.success("Desbloqueo administrativo exitoso!"); } else { toastr.success("Unlock configuration successfully"); }
+                  $("#toast-container").effect("slide", "slow");
 		  					}
   					
 	  				}
 						else{
-							toastr.error("Try again please!");
-				 	  	$("#toast-container").effect("bounce");
+							if (localStorage.current_lang == "es") { toastr.info("Int\u00e9ntelo nuevamente, por favor"); } else { toastr.info("Try again, please"); }
+              $("#toast-container").effect("bounce");
 						}
 			     
           }	       
