@@ -86,9 +86,6 @@ $(document).ready(function(){
    
   });
 
-  $("#modal-container-submit").on("shown.bs.modal",function(){
-     $("#clientEmail").focus();  
-  });
 
   $(".btnHome").click(function(){
       localStorage.flag=1;
@@ -111,7 +108,7 @@ $(document).ready(function(){
 
   $("#sendEmailfromStore").click(function(){
     var toValue= addressValue + " " +cityValue+ " " + stateValue+ " " + zipValue;
-    var domain = $("#selectSendDomain option:selected").text();
+    var domain = $("#selectSendDomain option:selected").val();
     var email=$("#clientEmailfromStore").val();
     var errorDomain= (email.match(/.com/g) || []).length;
     var errorSintax= (email.match(/@/g) || []).length;
@@ -145,9 +142,13 @@ $(document).ready(function(){
 	
 
   $("#modal-container-submit").on("shown.bs.modal",function(){
-     $("#selectDomain").val("Other");
      $("#selectDomain").change();
      $("#clientEmail").focus();
+  });
+
+  $("#modal-email").on("shown.bs.modal",function(){
+     $("#selectSendDomain").change();
+     $("#clientEmailfromStore").focus();
   });
 
   function qs() {

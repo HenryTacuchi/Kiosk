@@ -185,7 +185,7 @@ a.thumbnail:hover,a.thumbnail:active{
 	color: #fafafa;
 }
 .loader {
-  background-color: rgba(0,5,4,0.85);
+  background-color: rgba(0,5,4,1);
 }
 .loader .circle:after {
   background: #fff;

@@ -1,0 +1,82 @@
+.zoom{
+	animation-name: mainAnimate;
+    animation-duration: 0.6s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-name: mainAnimate;
+    -webkit-animation-duration: 0.6s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-timing-function: ease-in-out;     
+}
+/* The animation code */
+@keyframes mainAnimate {
+    0%   {
+    	opacity: 0;	
+    	transform: rotateY(90deg);
+    }
+    100% {
+    	opacity: 1;	
+    	transform: rotateY(0deg);
+    }
+}
+@-webkit-keyframes mainAnimate {
+    0%   {
+    	opacity: 0;	
+    	-webkit-transform: rotateY(90deg);
+    }
+    100% {
+    	opacity: 1;	
+    	-webkit-transform: rotateY(0deg);
+    }
+} 
+
+
+
+.item {
+	opacity: 0;	
+	animation-name: viewAnimate;
+    animation-duration: 0.8s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-name: viewAnimate;
+    -webkit-animation-duration: 0.8s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-timing-function: ease-in-out;     
+}
+
+.item:nth-child(1){
+	animation-delay: 0.1s;
+	-webkit-animation-delay: 0.1s;
+}
+.item:nth-child(2){
+	animation-delay: 0.2s;
+	-webkit-animation-delay: 0.2s;
+}
+.item:nth-child(3){
+	animation-delay: 0.3s;
+	-webkit-animation-delay: 0.3s;
+}
+.item:nth-child(4){
+	animation-delay: 0.4s;
+	-webkit-animation-delay: 0.4s;
+}
+
+/* The animation code */
+@keyframes viewAnimate {
+    0%   {
+    	transform: translate3D(130%,0,0) rotateZ(270deg);
+    }
+    100% {
+    	opacity: 1;	
+    	transform: translate3D(0%,0,0) rotateZ(0deg);
+    }
+}
+@-webkit-keyframes viewAnimate {
+    0%   {
+    	-webkit-transform: translate3D(130%,0,0) rotateZ(270deg);
+    }
+    100% {
+    	opacity: 1;	
+    	transform: translate3D(0%,0,0) rotateZ(0deg);
+    }
+} 

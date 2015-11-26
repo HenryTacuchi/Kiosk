@@ -56,6 +56,7 @@ section{
 .sectionSock{
 	position: relative;
 	margin-bottom: 2.5%;
+    margin-top: 2.5%;
 }
 .sectionStore{
 	margin-bottom: 1.5%;
@@ -255,23 +256,46 @@ footer .navbar-fixed-bottom{
 .thumbnail  p:hover{
 	text-decoration: none;
 }
-
-.caption p:nth-child(2) {
+/*Añadido*/
+.caption p:nth-child(3) {
     font-size: 24pt;
     text-align: center;
     margin-bottom: 5px;
 }
+.caption p:nth-child(2) {
+    font-size: 18pt;
+    text-align: center;
+    margin-bottom: 0;
+}
+.caption .lblStyle{
+	width: 50%;
+	text-align: right;
+}
+.relatedPrice {
+    height: 50px;
+    line-height: 52px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*fin añadido*/
 .thumbnail .caption p:first-child{
 	text-align: center;
-	height: 64px;
+	height: 50px;
 	margin-bottom: 5px;
+	overflow: hidden;
 }
 
 .lblStyle,.lblAvailability,.lblPrice,.lblSize{
-	font-size: 18pt;
 	float: left;
 	height: 50px;
 	line-height: 50px;
+}
+.lblStyle,.lblAvailability,.lblPrice,.lblSize,
+.lblStoreNo, .lblStoreName, .lblWebService, .lblRecoveryEmail,
+.lblPassword, .lblNewPassword, .lblNewPasswordRepeat{
+	font-size: 18pt;
 }
 .unitsLabel{
 
@@ -517,6 +541,9 @@ button:hover
     transform: translateY(1px);
 }
 
+.ui-selectmenu-menu .ui-menu {
+    padding-bottom: 0 !important;
+}
 .loader {
   cursor: progress;
   position: fixed;
@@ -531,7 +558,7 @@ button:hover
 }
 
 .loader .circle {
-    position: fixed;
+    position: absolute;
     width: 38px;
     height: 38px;
     opacity: 0;
@@ -545,6 +572,9 @@ button:hover
     animation-iteration-count: infinite;
     animation-name: orbit;
     animation-duration: 5.5s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: orbit;
+    -webkit-animation-duration: 5.5s;
 }
 .loader .circle:after {
   content: '';
@@ -555,15 +585,19 @@ button:hover
 }
 .loader .circle:nth-child(2) {
   animation-delay: 240ms;
+  -webkit-animation-delay: 240ms;
 }
 .loader .circle:nth-child(3) {
   animation-delay: 480ms;
+  -webkit-animation-delay: 480ms;
 }
 .loader .circle:nth-child(4) {
   animation-delay: 720ms;
+  -webkit-animation-delay: 720ms;
 }
 .loader .circle:nth-child(5) {
   animation-delay: 960ms;
+  -webkit-animation-delay: 960ms;
 }
 @keyframes orbit {
   0% {
@@ -602,6 +636,43 @@ button:hover
   }
 }
 
+@-webkit-keyframes orbit {
+  0% {
+    -webkit-transform: rotate(225deg);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+  }
+  7% {
+    -webkit-transform: rotate(345deg);
+    -webkit-animation-timing-function: linear;
+  }
+  30% {
+    -webkit-transform: rotate(455deg);
+    -webkit-animation-timing-function: ease-in-out;
+  }
+  39% {
+    -webkit-transform: rotate(690deg);
+    -webkit-animation-timing-function: linear;
+  }
+  70% {
+    -webkit-transform: rotate(815deg);
+    opacity: 1;
+    -webkit-animation-timing-function: ease-out;
+  }
+  75% {
+    -webkit-transform: rotate(945deg);
+    -webkit-animation-timing-function: ease-out;
+  }
+  76% {
+    -webkit-transform: rotate(945deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotate(945deg);
+    opacity: 0;
+  }
+}
+
 @media(max-width:767px){
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
 		font-size: 18pt;
@@ -610,8 +681,8 @@ button:hover
 		font-size: 12pt;
 	}
 	header .logoCompany {
-	    height: 70px;
-	    width: 70px;
+	    height: 65px;
+	    width: 65px;
 	}
 	.modal-content{
 		padding: 0 5%;
@@ -656,6 +727,14 @@ button:hover
 		padding: 3px 15px;
 		font-size: 14pt;
 	}
+	.btnBlue {
+	    padding: 6px 5px !important;
+	    font-size: 12pt !important; 
+	}
+	.caption p:nth-child(3) {
+		font-size: 14pt;
+		white-space: nowrap;
+	}
 }
 @media(min-width:768px){
 	.coolMessage{
@@ -670,7 +749,18 @@ button:hover
 	footer .navbar-fixed-bottom{
 		height: 70px;
 	}
-
+	.btnBlue {
+	    padding: 6px 5px !important;
+	    font-size: 14pt !important; 
+	}
+	.caption p:nth-child(3) {
+		font-size: 16pt;
+		white-space: nowrap;
+	}
+	header .logoCompany {
+	    height: 63px;
+	    width: 63px;
+	}
 
 }
 @media(min-width:992px){
@@ -683,10 +773,31 @@ button:hover
 	footer .navbar-fixed-bottom{
 		height: 80px;
 	}
+	.btnBlue {
+	    padding: 6px 10px !important;
+	    font-size: 16pt !important; 
+	}
+	.caption p:nth-child(3) {
+		font-size: 20pt;
+		white-space: nowrap;
+	}
+	header .logoCompany {
+	    height: 71px;
+	    width: 71px;
+	}
+}
+@media(min-width:1080px){
+	.container {
+	    width: 1040px;
+	}
+	header .logoCompany {
+	    height: 72px;
+	    width: 72px;
+	}
 }
 @media(min-width:1200px){
 	.container {
-	    width: 1050px;
+	    width: 1080px;
 	}
 	a, .lblOption {
 	    font-size: 17pt !important;
@@ -696,6 +807,14 @@ button:hover
 	}
 	.modal-content{
 		padding: 0 20%;
+	}
+	.caption p:nth-child(3) {
+		font-size: 24pt;
+		white-space: nowrap;
+	}
+	header .logoCompany {
+	    height: 75px;
+	    width: 75px;
 	}
 }
 @media(min-width:1500px){

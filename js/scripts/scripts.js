@@ -3,11 +3,7 @@ $(document).ready(function(){
 
   loadImages();
 
-  $('#selectDomain').selectmenu().selectmenu( "menuWidget");
-  $('#selectRecoveryDomain').selectmenu().selectmenu( "menuWidget");
-  $('#selectSendDomain').selectmenu().selectmenu( "menuWidget"); 
-  $('#sizeOptions').selectmenu().selectmenu("menuWidget").addClass("overflow");
-  $('#sizeOptions').selectmenu( "disable" );
+  loadCombos(); 
 
 	$('#cleanInputProduct').click(function(){
 		$('#skuCode').val("");
@@ -40,11 +36,30 @@ $(document).ready(function(){
 		$(".logoCompany").attr("src",localStorage.logo);			
 	}
 
+  function loadCombos(){
+
+  	var otherOption = "Other"; 
+  	if(localStorage.current_lang == "es") otherOption = "Otro";
+
+  	$("#selectDomain option[value = 'Other']").text(otherOption);
+  	$("#selectDomain").val("Other");
+  	$('#selectDomain').selectmenu().selectmenu( "menuWidget");
+
+  	$("#selectRecoveryDomain option[value = 'Other']").text(otherOption);
+  	$('#selectRecoveryDomain').val("Other");
+		$('#selectRecoveryDomain').selectmenu().selectmenu( "menuWidget");
+
+	  $("#selectSendDomain option[value = 'Other']").text(otherOption);
+	  $('#selectSendDomain').val("Other");
+	  $('#selectSendDomain').selectmenu().selectmenu( "menuWidget");   
+
+	  $('#sizeOptions').selectmenu().selectmenu("menuWidget").addClass("overflow");
+	  $('#sizeOptions').selectmenu( "disable" );
+	}
 	
 	$(window).on('resize', centerModals);
 
 
-	
 
 	$(".img-responsive").error(function(){
 		if (indexPage)
@@ -66,7 +81,7 @@ $(document).ready(function(){
 
 
 	$('#selectDomain').change(function(){
-		var toCompare = $('#selectDomain option:selected').text();
+		var toCompare = $('#selectDomain option:selected').val();
 		if(toCompare == "Other"){
 			$('.lblArroba').css('opacity','0');
 			$('.lblMessageOtherDomain').show().effect("slide");
@@ -75,8 +90,28 @@ $(document).ready(function(){
 			$('.lblMessageOtherDomain').slideUp("fast");
 		}
 	});
+	$('#selectDomain-menu').click(function(){
+		$('#selectDomain').change();
+	});
+
+$('#selectDomainSettings').change(function(){
+		var toCompare = $('#selectDomainSettings option:selected').val();
+		if(toCompare == "Other"){
+			$('.lblArroba').css('opacity','0');
+			$('.lblMessageOtherDomain').show().effect("slide");
+		}else{
+			$('.lblArroba').css('opacity','1');
+			$('.lblMessageOtherDomain').slideUp("fast");
+		}
+	});
+	$(document).on("click","#selectDomainSettings-menu",function(){
+		$('#selectDomainSettings').change();
+	});
+
+
 	$('#selectSendDomain').change(function(){
-		var toCompare = $('#selectSendDomain option:selected').text();
+		var toCompare = $('#selectSendDomain option:selected').val();
+		console.log("value = " +  toCompare);
 		if(toCompare == "Other"){
 			$('.lblArroba').css('opacity','0');
 			$('.lblMessageOtherDomain').show().effect("slide");
@@ -85,9 +120,13 @@ $(document).ready(function(){
 			$('.lblMessageOtherDomain').slideUp("fast");
 		}
 	});
+	$('#selectSendDomain-menu').click(function(){
+		$('#selectSendDomain').change();
+	});
+
 	$('#selectRecoveryDomain').change(function(){
 		console.log("df");
-		var toCompare = $('#selectRecoveryDomain option:selected').text();
+		var toCompare = $('#selectRecoveryDomain option:selected').val();
 		if(toCompare == "Other"){
 			$('.lblArroba').css('opacity','0');
 			$('.lblMessageOtherDomain').show().effect("slide");
@@ -96,11 +135,9 @@ $(document).ready(function(){
 			$('.lblMessageOtherDomain').slideUp("fast");
 		}
 	});
-
-	// $('.thumbnail img').hover(function(){
-	// 	$(this).effect("shake");
-	// });
-
+	$('#selectRecoveryDomain-menu').click(function(){
+		$('#selectRecoveryDomain').change();
+	});
 
 	$('#homeScreen').click(function(){
 		$(this).effect("fade","slow");
@@ -129,8 +166,8 @@ $(document).ready(function(){
 		$('.btnHome .lblOption').text("Inicio");
 		$('.btnKey .lblOption').text("Admin");
 		$('.btnConfig .lblOption').text("Config");
-		$('.btnSizeChart .lblOption').text("Tallas Maestro");
-		$('#lblSizeChart').text("Tallas Maestro");		
+		$('.btnSizeChart .lblOption').text("Maestro de Tallas");
+		$('#lblSizeChart').text("Maestro de Tallas");		
 		$('.btnRefresh .lblOption').text("Actualizar");
 		$('.btnContinue .lblOption').text("Continuar");
 		$('#lblSelect').text("Seleccione la tienda a la que desea ir");
@@ -157,6 +194,12 @@ $(document).ready(function(){
 		$('#submitClientEmail').text("Enviar");
 		$('#cancelClientEmail').text("Cancelar");
 
+		//Submit Send Email
+		$('#modal-email .modalTitle').text("Por favor, escriba su Email");
+		$('.lblMessageOtherDomain').text("Complete su email aqu\u00ED");
+		$('#sendEmailfromStore').text("Enviar");
+		$('#cancelEmailfromStore').text("Cancelar");
+
 		//Key
 		$('#modal-key .modalTitle').text("Ingrese su Contrase\u00F1a");
 		$('#lockSettings').text("Hecho");
@@ -169,7 +212,7 @@ $(document).ready(function(){
 		// $('#lblStyle').text("Estilo:");
 		$('.btnLink').text("Ver Producto");
 		$('#relatedItemsTitle').text("Productos Relacionados en la Tienda");
-		$('.flapLabel').text("Descripci\u00F3n T\u00E9cnica");
+		$('.btnLongDescription').text("Descripci\u00F3n T\u00E9cnica");
 		$('.lblAvailability').text("Disponibilidad:");
 		$('.lblStyle').text("Estilo:");
 		$('.lblPrice').text("Precio:");
@@ -236,6 +279,12 @@ $(document).ready(function(){
 		$('#submitClientEmail').text("Send");
 		$('#cancelClientEmail').text("Cancel");
 
+		//Submit Send Email
+		$('#modal-email .modalTitle').text("Please, write your email");
+		$('.lblMessageOtherDomain').text("Complete your email here");
+		$('#sendEmailfromStore').text("Send");
+		$('#cancelEmailfromStore').text("Cancel");
+
 		//Key
 		$('#modal-key .modalTitle').text("Write your Password");
 		$('#lockSettings').text("Done");
@@ -248,7 +297,7 @@ $(document).ready(function(){
 		// $('#lblStyle').text("Estilo:");
 		$('.btnLink').text("View Product:");
 		$('#relatedItemsTitle').text("Retaled items avaliable in store");
-		$('.flapLabel').text("Technical Description");
+		$('.btnLongDescription').text("Technical Description");
 		$('.lblAvailability').text("Available:");
 		$('.lblStyle').text("Style:");
 		$('.lblPrice').text("Price:");
@@ -283,7 +332,7 @@ $(document).ready(function(){
 
 
  $("#submitClientEmail").click(function(){
-      var domain = $("#selectDomain option:selected").text();
+      var domain = $("#selectDomain option:selected").val();
       var email=$("#clientEmail").val();
       var errorDomain= (email.match(/.com/g) || []).length;
       var errorSintax= (email.match(/@/g) || []).length;
@@ -348,13 +397,46 @@ function submitEmail(email){
 
 });
 $(window).load(function() {	
-		$(".loader").removeClass("show").addClass("hide"); 
-	  $("body").mCustomScrollbar({
+	$(".loader").removeClass("show").addClass("hide");
+	 
+    $("body").mCustomScrollbar({
 	    theme:"minimal",
 			scrollButtons:{
 			enable:true
 			}
 		});	
+    imagesResponsive();
 });
 
+var widthImage  = null;
+var sectionMainImage = $('.sectionMainImage').width();
 
+var sectionRelatedImage = $('.productsRelated div').width();
+
+function imagesResponsive(){
+	widthImage = $(".mainImage").width();			
+	$(".img-responsive").width(widthImage/4);
+	$(".img-responsive").height(widthImage/4);
+	$(".img-responsive").css('margin-bottom',widthImage/16- widthImage/32);
+	$(".btnLongDescription").css('margin-top',widthImage/16 - widthImage/18);
+
+
+	$(".thumbnail img").width(sectionRelatedImage);
+	$(".thumbnail img").height(sectionRelatedImage);
+}
+
+$(window).load(function() {
+	$(".mainImage").width(sectionMainImage);
+	$(".mainImage").height(sectionMainImage);
+
+	imagesResponsive();
+});
+
+$(window).resize(function() {
+	
+	$(".mainImage").width('100%');
+	$(".mainImage").height('100%');
+
+	imagesResponsive();
+	
+});

@@ -15,14 +15,26 @@ $(document).ready(function(){
 		var storeName= $("#storeName").val();
 		var email= $("#adminEmail").val();		
 		var checkEmail= validateEmail();
+		var newPass,oldPass,repPass,buttonPass;
 		if(storeNo.length>0 && webIp.length>0 && storeName.length>0 && email.length>0 && checkEmail != -1 ){
 			saveConfiguration(storeNo.trim(),webIp.trim(),checkEmail.trim(),storeName.trim());
 			
-			$(".sectionConfig").effect("drop");		
+			$(".sectionConfig").effect("drop");
+			if(localStorage.current_lang == "es"){		
+				newPass="Nueva Contrase\u00F1a";oldPass="Contrase\u00F1a";repPass="Confirmar Contrase\u00F1a";buttonPass="Guardar Contrase\u00F1a";changePass="Cambiar Contrase\u00F1a";
+			}		
+			else{
+				newPass="New Password";oldPass="Password";repPass="Repeat Password";buttonPass="Save Password";changePass="Change Password";
+			}
 
 			var template= _.template($("#sectionSockTemplate").html());
-				            			var html= template ({								            				
-									            			});            	
+				            			var html= template ({
+				            			newPass: newPass,
+				            			oldPass: oldPass,
+				            			repPass: repPass,
+				            			buttonPass: buttonPass,
+				            			changePass: changePass
+									        });            	
 		  $(".showSectionIP").append(html);		          			
 			$(".sectionIP").delay(100).show( "drop", {direction: "down"},"fast");
 			checkPassword();
@@ -83,7 +95,6 @@ $(document).ready(function(){
 			$(this).attr("src","../img/noImage.jpg");		
 	});
 
-
 	function checkPassword(){
 		var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
 			db.readTransaction(function (tx) {
@@ -102,6 +113,8 @@ $(document).ready(function(){
 			db.readTransaction(function (tx) {
 					tx.executeSql("SELECT * FROM KioskPreferences", [], function (tx, results) {
 						var count = results.rows.length;
+						var otherOption = "Other"; 
+  					if(localStorage.current_lang == "es") otherOption = "Otro";    
 			      if(count>0){
 			      		$("#storeNo").val(results.rows.item(0).StoreNo);
 								$("#storeName").val(localStorage.storeName);
@@ -109,23 +122,44 @@ $(document).ready(function(){
 								var email= results.rows.item(0).AdminEmail;
 								var checkDom = email.lastIndexOf("@");
       					var resultDom = email.substring(checkDom + 1);
-      					var splitEmail= email.substring(0,checkDom);
-      					var existDomain= $("#selectDomain").val(resultDom);
-      					if(existDomain){
+      					var splitEmail= email.substring(0,checkDom);      					
+      					var existDomain= $("#selectDomainSettings option[value='"+resultDom+"']").length;
+      					  					 
+
+      					// Set the value saved in the db
+      					if(existDomain>0){
       						$("#adminEmail").val(splitEmail);
+      						$("#selectDomainSettings").val(resultDom);
+      						$("#selectDomainSettings option[value = 'Other']").text(otherOption);
+      					  $('#selectDomainSettings').selectmenu().selectmenu( "menuWidget");
+      					  $("#selectDomainSettings").change();
+
       					}
       					else{
+      						// Fill textbox
       						$("#adminEmail").val(email);
-      						("#selectDomain").val("Other");
+      						// Set language for the option other
+      						$("#selectDomainSettings option[value = 'Other']").text(otherOption);
+      						$("#selectDomainSettings").val("Other");  
+      						// Build personalize select    						
+      						$('#selectDomainSettings').selectmenu().selectmenu( "menuWidget");
+      						$("#selectDomainSettings").change();
 
-      					}
+      					}								
 
-								
-
+			      }
+			      else{			      	
+			      	//Set initial configuration for Email
+			      	$("#selectDomainSettings option[value = 'Other']").text(otherOption);
+			      	$("#selectDomainSettings").val("Other");
+			      	$('#selectDomainSettings').selectmenu().selectmenu( "menuWidget");
+							$("#selectDomainSettings").change();
+							
 			      }
 			   	});
 			 
 			});
+	
 
 	}
 
@@ -173,14 +207,11 @@ $(document).ready(function(){
           $("#toast-container").effect("bounce");
    			}
 			);
-		});
-	
+		});	
 	}
-
-
 	
-	 function validateEmail(){
-      var domain = $("#selectDomain option:selected").text();
+	function validateEmail(){
+      var domain = $("#selectDomainSettings option:selected").val();
       var email=$("#adminEmail").val();
       var errorDomain= (email.match(/.com/g) || []).length;
       var errorSintax= (email.match(/@/g) || []).length;
@@ -204,9 +235,7 @@ $(document).ready(function(){
           else{
            return -1;
           }
-
         } 
-      
   }
 
 

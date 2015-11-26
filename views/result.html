@@ -23,6 +23,8 @@
 	<link href="../css/jquery-ui.min.css" rel="stylesheet">
 	<link href="../css/mbExtruder.css" rel="stylesheet" >
 	<link href="../css/jquery.mCustomScrollbar.css" rel="stylesheet"/>
+	<link href="../css/animate.css" rel="stylesheet"/>
+	<link href="../css/animation.css" rel="stylesheet"/>
 
 </head>
 <body class="bg">
@@ -39,24 +41,24 @@
 						<li class="col-xs-6 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
 							<div class="iconOption"> <img src="../img/iconMail.svg" class="imgIcon"></div>	
 							<div class="lblOption"> </div>		
-							<label class="coolMessage">Sign up to win something cool!</label>	
+							<label class="coolMessage"></label>	
 						</li>
 						<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
 									<div class="modal-header">
 										<h2 class="modal-title modalTitle text-center">
-											Please, write your email
+											
 										</h2>
 									</div>
 									<div class="modal-body">
 										<div class="input-group">
 											<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
-											<span class="lblMessageOtherDomain">Complete your email here</span>
+											<span class="lblMessageOtherDomain"></span>
 	  										<span class="input-group-btn areaDomain">
 	  											<span class="lblArroba">@</span>
 	  											<select id="selectDomain">
-	  												<option value="realcs.com">realcs.com</option>
+	  												<option value="yahoo.com">yahoo.com</option>
 														<option value="hotmail.com">hotmail.com</option>
 														<option value="outlook.com">outlook.com</option>
 														<option value="gmail.com">gmail.com</option>
@@ -67,10 +69,10 @@
 									</div>
 									<div class="modal-footer">																
 										<button type="button" class="btn" id="submitClientEmail">
-											Send
+											
 										</button>
 										<button type="button" class="btn" id="cancelClientEmail">
-											Cancel
+											
 										</button>
 									</div>
 								</div>							
@@ -78,7 +80,7 @@
 						</div>
 						<li class="col-xs-6 text-center btnHome">
 							<div class="iconOption"> <img src="../img/iconHome.svg" class="imgIcon"></div>
-							<div class="lblOption">Home</div>
+							<div class="lblOption"></div>
 						</li>
 					</ol>			
 				</div>
@@ -96,21 +98,21 @@
 
 					<div class="productDescription text-center">
 
-						<div class="col-xs-6 lblPrice text-right">Price:</div>
+						<div class="col-xs-6 lblPrice text-right"></div>
 						<div class="col-xs-6 txtStyle text-left" id="txtPrice"></div>
 
-						<div class="col-xs-6 lblStyle text-right">Style:</div>
+						<div class="col-xs-6 lblStyle text-right"></div>
 						<div class="col-xs-6 txtStyle text-left" id="txtStyle"></div>
 
-						<div class="col-xs-6 lblAvailability text-right">Availability:</div>
-						<div class="col-xs-6 txtStyle text-left" id="txtStock">In Stock </div>
+						<div class="col-xs-6 lblAvailability text-right"></div>
+						<div class="col-xs-6 txtStyle text-left" id="txtStock"></div>
 						
 						<!--<div class="col-xs-3 text-left l unitsLabel" id="txtUnits">45</div>	 -->
 
 						<!-- <div class="col-xs-3  text-right r lblUnits">Units:</div> -->
 						
 
-						<span class="longDescription hide">long Description</span>
+						<span class="longDescription hide"></span>
 						
 						<div id="longDescriptionContent" class="{title:'Technical Description'}" style="display: none;" data-mcs-theme="dark"></div> 						
 						
@@ -121,8 +123,8 @@
 				<!-- <div class="col-xs-2  text-right r">Color:</div>
 				<div class="col-xs-2 text-left l" id="txtColor">Grey</div> -->
 
-				<div class="col-xs-6  text-right  lblSize">Size:</div>
-				<div class="col-xs-6  text-left l" id="txtSize">XL</div>
+				<div class="col-xs-6  text-right  lblSize"></div>
+				<div class="col-xs-6  text-left l" id="txtSize"></div>
 
 				
 			</div>
@@ -146,7 +148,7 @@
 					<span class='zoom' id='zoomImage'>
 						<img src="" class="mainImage"/>
 					</span>
-					<button type="button" class="btn btnLongDescription">Technical Description</button>
+					<button type="button" class="btn btnLongDescription"></button>
 				</div>				
 			</div>
 		</div>	
@@ -156,65 +158,39 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<h1 id="relatedItemsTitle">Retaled items avaliable in store</h1>
+					<h1 id="relatedItemsTitle"></h1>
 				</div>
 			</div>
 			<div class="row">
 				<section class="messageResultProducts" style="display: none;">
 					<div class="col-xs-12 text-center">
-						<p id="lblMessageResultProducts">Sorry, no products found.</p>
+						<p id="lblMessageResultProducts"></p>
 					</div>
 				</section>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<section class="row productsRelated">
-						<div class="col-xs-4">
-							<a class="thumbnail" href="#" id="relatedItem1">
-								<img class="relatedProductImage1" src="" />
-								<span class="sku1 hide">SKU</span> <span class="size1 hide">Size</span>
+					<section class="row productsRelated"> </section>
+						<script type="text/template" id="relatedTemplate">
+						<div class="<%=colDivision%> <%=animation%> <%=delay%> ">
+							<a class="thumbnail" href="<%=link%>" id="relatedItem1">
+								<img class="relatedProductImage1" src="<%=image%>" />
+								<span class="sku1 hide"><%=sku%></span> <span class="size1 hide"><%=size%></span>
 								<div class="caption">									
 									<p>
-										
+										<%=description%>
 									</p>
+									<div class="captionStyle">										
+										<div class="relatedPrice"><%=style%></div>
+									</div>
 									<p>
-										$0.00
+										<%=price%>
 									</p>
-										<div class="btn btnBlue btnLink"  id="linkRelated1">View product</div>
+										<div class="btn btnBlue btnLink"  id="linkRelated1"><%=btnText%></div>
 								</div>
 							</a>
 						</div>
-						<div class="col-xs-4">
-							<a class="thumbnail" id="relatedItem2" href="#">
-								<img class="relatedProductImage2" src="" />
-								<span class="sku2 hide">SKU</span> <span class="size2 hide">Size</span> 
-								<div class="caption">									
-									<p>
-										
-									</p>
-									<p>
-										$0.00
-									</p>
-										<div class="btn btnBlue btnLink" href="#" id="linkRelated2">View product</div>
-								</div>
-							</a>
-						</div>
-						<div class="col-xs-4">
-							<a class="thumbnail" id="relatedItem3" href="#">
-								<img class="relatedProductImage3" src="" />
-								<span class="sku3 hide">SKU</span> <span class="size3 hide">Size</span>
-								<div class="caption">									
-									<p>
-										
-									</p>
-									<p>
-										$0.00
-									</p> 
-										<div class="btn btnBlue btnLink" href="#" id="linkRelated3">View product</div>
-								</div>
-							</a>
-						</div>
-					</section>
+						</script>					
 				</div>
 			</div>
 		</div>	
@@ -226,15 +202,15 @@
 			<div class="navbar-fixed-bottom redSock">
 				<div class="col-xs-4 text-center btnReturn btn noContent" >
 					<div class="iconOption"><img src="../img/iconReturn.svg" class="imgIcon"></div>
-					<div class="lblOption">Return</div>
+					<div class="lblOption"></div>
 				</div>
 				<div class="col-xs-4 text-center btnScanProduct btn noContent">
 					<div class="iconOption"><img src="../img/iconScanProduct.svg" class="imgIcon"></div>
-					<div class="lblOption">Scan Product</div>
+					<div class="lblOption"></div>
 				</div>
 				<div class="col-xs-4 text-center btnCheckLocals btn noContent">
 					<div class="iconOption"><img src="../img/iconHome.svg" class="imgIcon"></div>
-					<div class="lblOption">Check Other Stores</div>
+					<div class="lblOption"></div>
 				</div>
 			</div>			
 		</footer>
@@ -248,45 +224,7 @@
 	  <div class='circle'></div>
 	</div>
 
-	<script>		
-		
-		function imagesResponsive(){
-			widthImage = $(".mainImage").width();			
-			$(".img-responsive").width(widthImage/4);
-			$(".img-responsive").height(widthImage/4);
-			$(".img-responsive").css('margin-bottom',widthImage/16- widthImage/32);
-			$(".btnLongDescription").css('margin-top',widthImage/16 - widthImage/18);
-
-
-			$(".thumbnail img").width(sectionRelatedImage);
-			$(".thumbnail img").height(sectionRelatedImage);
-			console.log($(".thumbnail img").width());
-			console.log($(".thumbnail img").height());
-		}
-
-		var widthImage  = null;
-		var sectionMainImage = $('.sectionMainImage').width();
-
-		var sectionRelatedImage = $('.productsRelated div').width();
-
-		$(window).load(function() {
-			$(".mainImage").width(sectionMainImage);
-			$(".mainImage").height(sectionMainImage);
-
-			imagesResponsive();
-
-
-		});
-
-		$(window).resize(function() {
-			
-			$(".mainImage").width('100%');
-			$(".mainImage").height('100%');
-
-			imagesResponsive();
-			
-		});
-	</script>
+	<div class="techincalTemp" style="width: 720px; padding: 0pt 5pt 0pt 20pt; text-align: center;position: absolute; top: 0; display:none;"></div>
 
 </body>
 </html>

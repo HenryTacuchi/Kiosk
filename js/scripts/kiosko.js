@@ -2,8 +2,6 @@ $(document).ready(function(){
 	
   $(".loader").removeClass("show").addClass("hide"); 
   var storeNo;
-	a= localStorage.webIp;
-	b= localStorage.logo;
 	getLanguage();
 	checkModal();
 	$("#homeScreen").click(function(){
@@ -17,6 +15,7 @@ $(document).ready(function(){
 			e.preventDefault();		
 
 			var sku= $("#skuCode").val();
+			var optionHeight;
 			 $.ajax({
               type: "GET",
               url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/LoadSizes/"+sku,
@@ -28,22 +27,28 @@ $(document).ready(function(){
               	options.find('option').remove().end();
               	var selected = 0;
               	var data= result.LoadSizesResult;
+              	optionHeight  = data.length;
               	if (data!=null && data.length ){
 	              	$.each(data, function( index, value) {
+	              		localStorage.SKU=value.sku;
 										options.append($("<option></option>").attr("value",index).text(value.sizecode)); 
+
 										if (value.selected == true ){
 											selected=index;
 										}
 									}); 
 	              	options.val(selected);
-                $('#sizeOptions').selectmenu("destroy");
-					    	$('#sizeOptions').selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" ); 
-					    	$('#sizeOptions').selectmenu("enable"); 
+	                $('#sizeOptions').selectmenu("destroy");
+						    	$('#sizeOptions').selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" ); 
+						    	$('#sizeOptions').selectmenu("enable"); 
+
+					    		resizeCombo(optionHeight);
 
                 }
                 else{
                 	if (localStorage.current_lang == "es") { toastr.info("Producto no encontrado", "", { timeOut: 1000 }); } else { toastr.info("Product not found", "", { timeOut: 1000 }); }
                   $("#toast-container").effect("bounce");
+                  $('#sizeOptions').selectmenu("disable"); 
                 }
                 						 	
      					},       					
@@ -57,20 +62,19 @@ $(document).ready(function(){
 	});
 		
 	$("#modal-container-submit").on("shown.bs.modal",function(){
-  	 $("#selectDomain").val("Other");
-  	 $("#selectDomain").change();
-  	 $("#clientEmail").focus();
+		$("#selectDomain").change();
+		$("#clientEmail").focus();
   });
 	$("#modal-key").on("shown.bs.modal",function(){
-  	 $("#selectRecoveryDomain").val("Other");
-  	 $("#selectRecoveryDomain").change();
-  	 $("#clientEmail").focus();
+		$("#selectRecoveryDomain").val("Other");
+		$("#selectRecoveryDomain").change();
+		$("#clientEmail").focus();
   });
 
   $("#btnRecovery").click(function(){
-  	 $("#selectRecoveryDomain").val("Other");
-  	 $("#selectRecoveryDomain").change();
-  	 $("#recoveryPassword").focus();
+		$("#selectRecoveryDomain").val("Other");
+		$("#selectRecoveryDomain").change();
+		$("#recoveryPassword").focus();
   });
 
   $(".btnHome").click(function(){
@@ -100,7 +104,7 @@ $(document).ready(function(){
 			 	});
 			db.transaction(function (tx) {  
 		   		tx.executeSql("INSERT INTO ProductSearched (Sku, Size) VALUES (?,?)",[sku,index],
-		   			function(tx,success){ console.log(sku+" saved"); window.location = "views/result.html?sku="+sku+"&size="+size+"&store="+storeNo;},
+		   			function(tx,success){ console.log(sku+" saved"); window.location = "views/result.html?sku="+localStorage.SKU+"&size="+size+"&store="+storeNo;},
 		   			function(tx,e){ console.log(e);}
 					);
 		  });
@@ -150,6 +154,18 @@ $(document).ready(function(){
 	    $("#submitClientEmail").click();
 	  }
 	});
+
+function resizeCombo(optionHeight){
+	var  documentH =$( window ).height();
+	var  navH = $('.navPosition').height();
+	var comboH = $('#sizeOptions-button').height();
+	var comboPos = $('#sizeOptions-button').offset().top;
+	var maxHeight = documentH - ( comboH + comboPos ) - ( navH ) - 80;
+	var comboHeight = comboH*optionHeight ;
+
+	$('#sizeOptions-menu').css('max-height',maxHeight);	
+	$('#sizeOptions-menu').css('height',comboHeight);
+}
 		
 function checkModal(){
 	var db = openDatabase("AppPreferences", "1.0", "Save local preferences", 2 * 1024 * 1024);
@@ -350,9 +366,7 @@ function checkModal(){
   $(".btnKey").click(function(){
 		 	$("#modal-key").modal("show");
   });
-
-
-  
+ 
 
   $("#btnRecoverySend").click(function(){
 		 // Delete all information from dataBase

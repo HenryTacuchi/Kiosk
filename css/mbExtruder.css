@@ -180,7 +180,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a0a0a', end
 }
 .extruder.right .extruder-content {
    /*overflow-y: auto !important;*/
-   height: 500px !important;
+   height: 500px ;
 }
 .extruder.right.open .extruder-content {
     -moz-box-shadow: -2px 0 5px #999;

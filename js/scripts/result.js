@@ -17,14 +17,14 @@ $(document).ready(function(){
           },
           success:function(result){
           	var data = result.GetSKUInfoResult;
-          	var currencySymbol;
-          	$.each(data, function( index, value){
-						
+          	var currencySymbol="";
+          	$.each(data, function( index, value){						
 							// Retrieve product information
+							localStorage.SKU= value.Sku;
 							var price= (parseFloat(value.RetailPrice)).toFixed(2);
           		$(".shortDescription").text(value.Description);
-          		$("#txtStyle").text(value.Style);          		
-          		
+          		$("#txtStyle").text(value.Style);   
+          		$("#txtSize").text(value.SizeCode);
           		if (value.CurrencyName == "NUEVOS SOLES"){
           			currencySymbol= "S/. ";          		
           		}else{
@@ -32,36 +32,32 @@ $(document).ready(function(){
           		} 
           		$("#txtPrice").text(currencySymbol+ price);
           		var units = (parseFloat(value.OnHandQty)).toFixed(0);
-          		var unit = units.toString();
-          		
+          		var unit = units.toString();          		
           		if (localStorage.current_lang == "es"){
                     if (value.OnHandQty > 0) {
-                        $("#txtStock").text("EN STOCK, "+ unit +" unid." ).addClass("available");
+                        $("#txtStock").text("En stock, "+ unit +" unid." ).addClass("available");
                     }
                     else {
-                        $("#txtStock").text("SIN STOCK").addClass("no-available");
-                    }
-                    
-                    //$("#txtUnits").text(unit +" unid.");
-                        
+                        $("#txtStock").text("Sin stock").addClass("no-available");
+                    }                    
+                    //$("#txtUnits").text(unit +" unid.");                        
               }
               else {
                    if (value.OnHandQty > 0) {
-                        $("#txtStock").text("IN STOCK, "+ unit+" units" ).addClass("available");
+                        $("#txtStock").text("In stock, "+ unit+" units" ).addClass("available");
                     }
                    else {
-                        $("#txtStock").text("OUT STOCK").addClass("no-available");
+                        $("#txtStock").text("Out stock").addClass("no-available");
                     }                        
                     //$("#txtUnits").text(unit+" units");
              } 
              	var title;     		
               if (localStorage.current_lang == "es") { title= "<h3>Descripci\u00f3n T\u00e9cnica<h3>";}     
-              else{ title= "<h3>Technical Description<h3>";}          					
-             	 
-             	;
+              else{ title= "<h3>Technical Description<h3>";}  
           		$("#longDescriptionContent").append(title+value.LongDescription);
+          		$('.technicalTemp').append(title+value.LongDescription);
+          	
           		//$("#longDescriptionSingleImage").text(value.LongDescription);
-
           		// Retrieve images
           		images=value.ImagePath;
           		if(images.length>1){
@@ -99,7 +95,6 @@ $(document).ready(function(){
 		          			}  
 		          		});
 		          	//startCarrousel();
-
 	          	}
 	          	else if(images.length==0) {
 		          		$.each(images, function( index, value) {
@@ -108,27 +103,61 @@ $(document).ready(function(){
 		          		$("#myCarousel").hide();
 		          		$("#technicalDescriptionPanel").show();
 		         	}
+		         	//});
           		// Retrieve related products
           		$.ajax({
 		            type: "GET",
-		            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/GetRelatedProduct/"+qsParm["sku"]+"/"+qsParm["store"],
+		            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/GetRelatedProduct/"+localStorage.SKU+"/"+qsParm["store"],
 		            async: false,
 		            dataType: "json",
 		            crossdomain: true,
 		            success:function(relatedProducts){
 		            	var relatedProducts = relatedProducts.GetRelatedProductResult;
-		            	if(relatedProducts.length>0){
+		            	var elements=relatedProducts.length;
+		            	var colDivision;
+		            	if(elements>0){
+		            		if (elements==1){colDivision="col-xs-6 col-xs-offset-3";}
+		            	  else if(elements==2){colDivision="col-xs-6";}
+		            	  else if(elements==3){colDivision="col-xs-4";}
+		            	  else if(elements==4){colDivision="col-xs-3";}
+		            	  else{colDivision="col-xs-2";}
+		            	  var viewProduct;
+		            	  if (localStorage.current_lang == "es"){ viewProduct="Ver Producto";}
+		            	  else {viewProduct= "View Product";}
+		            	  var animate, delay;
 			            	$.each(relatedProducts, function( index, item) {
 			            		var i= index+1;
 			            		var price= (parseFloat(item.RetailPrice)).toFixed(2);
-			            		$("#relatedItem"+i+" p:first-child").text(item.Descr);			            		
+			            		if (elements==1){animate="slideUp";}
+		            	  	else if(elements==2){if (i==1) {animate="slideRight";delay="delay"+i;}else{animate="slideRight";delay="delay"+i;}}
+		            	  	else if(elements==3){if (i==1) {animate="slideRight";delay="delay"+i;}else if (i==2){animate="slideRight";delay="delay"+i;}else{animate="slideRight";delay="delay"+i;}}
+		            	  	else if(elements==4){if (i==1 || i==2){animate="slideRight";delay="delay"+i}else{animate="slideRight";delay="delay"+i;}}
+		            	  	else{if (i==1 || i==2) {animate="slideRight";delay="delay"+i;}else if (i==3){animate="slideRight";delay="delay"+i;}else{animate="slideRight";delay="delay"+i;}}
+
+
+			            		var template= _.template($("#relatedTemplate").html());
+				            	var html= template ({
+									            			description: item.Descr,
+									            			price: currencySymbol+price,
+									            			sku: item.SKU,
+									            			size: item.SizeCode,
+									            			image: item.ImagePath,
+									            			style: item.StyleName,
+									            			link: "result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"],
+									            			colDivision: colDivision,
+									            			btnText: viewProduct,
+									            			animation: animate,
+									            			delay: delay
+									            			});            	
+				            			$(".productsRelated").append(html);	 
+			            		/*$("#relatedItem"+i+" p:first-child").text(item.Descr);			            		
 			            		$("#relatedItem"+i+" p:nth-child(2)").text(currencySymbol+price);
 			            		$(".sku"+i).text(item.SKU);
 			            		$(".size"+i).text(item.SizeCode);			            		
 			            		$(".relatedProductImage"+i).attr("src",item.ImagePath);
-			            		$("#relatedItem"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);
+			            		$("#relatedItem"+i).attr("href","result.html?sku="+item.SKU+"&size="+item.SizeCode+"&store="+qsParm["store"]);*/
 
-			     				});			            
+			     					});			            
 			            }
 			            else{
 			            	$(".productsRelated").hide();
@@ -143,8 +172,7 @@ $(document).ready(function(){
 
 							});  
 
-						}); 
-						//setTimeout(function(){$(".loader").removeClass("show").addClass("hide");},1000);                		  	
+						});             		  	
  					},       					
 				  error: function(error) {
 			 	  	toastr.error("error = " + error.status +" "+error.statusText);			 	  
@@ -231,20 +259,18 @@ $(document).ready(function(){
 	
 
  	$("#modal-container-submit").on("shown.bs.modal",function(){
-  	 $("#selectDomain").val("Other");
-  	 $("#selectDomain").change();
-  	 $("#clientEmail").focus();
-  	});
+		$("#selectDomain").change();
+		$("#clientEmail").focus();
+	});
 
   $("#longDescriptionContent").click(function(){
-		  if (localStorage.opened!=1) $("#longDescriptionContent").closeMbExtruder();
-		  localStorage.opened=0;
-		 		  
+	  if (localStorage.opened!=1) $("#longDescriptionContent").closeMbExtruder();
+	  localStorage.opened=0;		 		  
 	});
+
   $(".btnLongDescription").click(function(){		  
 			localStorage.opened=1;
-			$(".flap").click();		 
-
+			$(".flap").click();	 
   })
 
 	$("#longDescriptionContent").buildMbExtruder({
@@ -308,7 +334,12 @@ $(window).load(function(){
     	theme:"rounded-dark",
     	live: "on",
     	scrollButtons:{ enable: true }
-    });	
-    				            
+    });	  
+
+    var dynamicHeight = $('.techincalTemp').height();
+    var maxHeight = $('.extruder-content').height();
+    if( dynamicHeight < maxHeight ){
+    	$('.extruder-content').height(dynamicHeight);
+    }			            
 });
 
