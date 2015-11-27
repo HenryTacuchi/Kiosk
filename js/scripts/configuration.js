@@ -152,7 +152,11 @@ $(document).ready(function(){
 			      	//Set initial configuration for Email
 			      	$("#selectDomainSettings option[value = 'Other']").text(otherOption);
 			      	$("#selectDomainSettings").val("Other");
-			      	$('#selectDomainSettings').selectmenu().selectmenu( "menuWidget");
+			      	$('#selectDomainSettings').selectmenu().selectmenu( "menuWidget",{
+    positionOptions: {
+        my: 'right top'
+    }
+});
 							$("#selectDomainSettings").change();
 							
 			      }

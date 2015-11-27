@@ -129,7 +129,7 @@ footer .navbar-fixed-bottom{
     left: 0;
     bottom: -24pt;
     font-size: 14pt;
-
+    white-space: nowrap;
 }
 .areaDomain{
 	padding: 0;
