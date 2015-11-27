@@ -43,7 +43,7 @@ header .nameCompany{
 }
 header .iconOption{
 	height: 50px;
-	width: 50px;
+	width: 44px;
 }
 header .lblOption{
 	text-align: center;
@@ -183,12 +183,15 @@ footer .navbar-fixed-bottom{
 .lblStyle{
 	padding-left: 0;
 }
-.iconOption{display: inline-block;}
+.iconOption{display: inline-block; 
+    width: 40px;
+    height: 29px;
+}
 .imgIcon{
-  width: 40px;
-  height: 29px;
-  margin: 4px auto 0;
-  display: block;
+	width: 100%;
+    height: 100%;
+    margin: 4px auto 0;
+    display: block;
 }
 .imgIconShort{
 	width: 30px;
