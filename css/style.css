@@ -535,8 +535,8 @@ button:focus,
 button:active,
 button:hover
 {
-    outline:0px !important;
-    -webkit-appearance:none;
+    /*outline:0px !important;
+    -webkit-appearance:none;*/
 }
 
 .nav-tabs.nav-justified {
