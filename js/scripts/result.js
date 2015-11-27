@@ -336,7 +336,7 @@ $(window).load(function(){
     	scrollButtons:{ enable: true }
     });	  
 
-    var dynamicHeight = $('.techincalTemp').height();
+    var dynamicHeight = $('.technicalTemp').height();
     var maxHeight = $('.extruder-content').height();
     if( dynamicHeight < maxHeight ){
     	$('.extruder-content').height(dynamicHeight);

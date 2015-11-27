@@ -2,6 +2,7 @@
 
 $(document).ready(function(){
   
+  $(".loader").removeClass("hide").addClass("show");
 	var qsParm = new Array();
   var zipValue, stateValue,cityValue,fromValue,addressValue;
  	qs();
