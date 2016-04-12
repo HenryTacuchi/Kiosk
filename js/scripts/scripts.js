@@ -2,7 +2,6 @@
 $(document).ready(function(){
 
   loadImages();
-
   loadCombos(); 
 
 	$('#cleanInputProduct').click(function(){
@@ -33,29 +32,29 @@ $(document).ready(function(){
 	});
 
 	function loadImages(){
-		$(".logoCompany").attr("src",localStorage.logo);			
+	    $(".logoCompany").css("background-image", "url(" + localStorage.logo + ")");
 	}
 
   function loadCombos(){
 
-  	var otherOption = "Other"; 
-  	if(localStorage.current_lang == "es") otherOption = "Otro";
+      var otherOption = "Other";
+      if (localStorage.current_lang == "es") otherOption = "Otro";
 
-  	$("#selectDomain option[value = 'Other']").text(otherOption);
-  	$("#selectDomain").val("Other");
-  	$('#selectDomain').selectmenu().selectmenu( "menuWidget");
+      $("#selectDomain option[value = 'Other']").text(otherOption);
+      $("#selectDomain").val("Other");
+      $('#selectDomain').selectmenu().selectmenu("menuWidget");
 
-  	$("#selectRecoveryDomain option[value = 'Other']").text(otherOption);
-  	$('#selectRecoveryDomain').val("Other");
-		$('#selectRecoveryDomain').selectmenu().selectmenu( "menuWidget");
+      $("#selectRecoveryDomain option[value = 'Other']").text(otherOption);
+      $('#selectRecoveryDomain').val("Other");
+      $('#selectRecoveryDomain').selectmenu().selectmenu("menuWidget");
 
-	  $("#selectSendDomain option[value = 'Other']").text(otherOption);
-	  $('#selectSendDomain').val("Other");
-	  $('#selectSendDomain').selectmenu().selectmenu( "menuWidget");   
+      $("#selectSendDomain option[value = 'Other']").text(otherOption);
+      $('#selectSendDomain').val("Other");
+      $('#selectSendDomain').selectmenu().selectmenu("menuWidget");
 
-	  $('#sizeOptions').selectmenu().selectmenu("menuWidget").addClass("overflow");
-	  $('#sizeOptions').selectmenu( "disable" );
-	}
+      $('#sizeOptions').selectmenu().selectmenu("menuWidget").addClass("overflow");
+      $('#sizeOptions').selectmenu("disable");
+}
 	
 	$(window).on('resize', centerModals);
 
@@ -364,38 +363,73 @@ $('#selectDomainSettings').change(function(){
       
   });
 
-function submitEmail(email){
+//function submitEmail(email){
 
-		$.ajax({
-            type: "POST",
-            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SubmitEmailPost",
-            async: false,
-            contentType: "application/json",
-            data: JSON.stringify({"email": email}),
-            crossdomain: true,
-            success:function(result){
-            	 	if (result==true){
-								    if (localStorage.current_lang == "es") { toastr.success("Susbscripci\u00f3n exitosa"); } else { toastr.success("Successful subscription!"); }
-                    $("#toast-container").effect("slide", "slow");
-                    $("#modal-container-submit").modal("hide");
-								}
-								else{
-									  if (localStorage.current_lang == "es") { toastr.error("Correo incorrecto o ya est\u00e1 registrado!", "", { timeOut: 1000 }); } else { toastr.error("Invalid email or it is already subscripted!", "", { timeOut: 1000 }); }
-                    $("#toast-container").effect("bounce");
-								}
+//		$.ajax({
+//            type: "POST",
+//            url: "http://"+ localStorage.webIp + "/KioskoServices/Service.svc/SubmitEmailPost",
+//            async: false,
+//            contentType: "application/json",
+//            data: JSON.stringify({"email": email}),
+//            crossdomain: true,
+//            success:function(result){
+//            	 	if (result==true){
+//								    if (localStorage.current_lang == "es") { toastr.success("Susbscripci\u00f3n exitosa"); } else { toastr.success("Successful subscription!"); }
+//                    $("#toast-container").effect("slide", "slow");
+//                    $("#modal-container-submit").modal("hide");
+//								}
+//								else{
+//									  if (localStorage.current_lang == "es") { toastr.error("Correo incorrecto o ya est\u00e1 registrado!", "", { timeOut: 1000 }); } else { toastr.error("Invalid email or it is already subscripted!", "", { timeOut: 1000 }); }
+//                    $("#toast-container").effect("bounce");
+//								}
 						
           	
-            },
-            error:function(error) {
-				 	  	 if (localStorage.current_lang == "es") { toastr.info("Int\u00e9ntelo nuevamente, por favor"); } else { toastr.info("Try again, please"); }
-               $("#toast-container").effect("bounce");
-				 	 	}
-					});
-	}
+//            },
+//            error:function(error) {
+//				 	  	 if (localStorage.current_lang == "es") { toastr.info("Int\u00e9ntelo nuevamente, por favor"); } else { toastr.info("Try again, please"); }
+//               $("#toast-container").effect("bounce");
+//				 	 	}
+//		});
+//}
 
-	   
+
+
+function submitEmail(email) {
+
+    $.ajax({
+        type: "GET",
+        url: "http://" + localStorage.webIP + "/KioskoServices/Service.svc/SubmitEmail/" + email,
+        async: false,      
+        dataType: "json",
+        crossdomain: true,
+        success: function (result) {
+            if (result == true) {
+                if (localStorage.current_lang == "es") { toastr.success("Susbscripci\u00f3n exitosa"); } else { toastr.success("Successful subscription!"); }
+                $("#toast-container").effect("slide", "slow");
+                $("#modal-container-submit").modal("hide");
+            }
+            else {
+                if (localStorage.current_lang == "es") { toastr.error("Correo incorrecto o ya est\u00e1 registrado!", "", { timeOut: 1000 }); } else { toastr.error("Invalid email or it is already subscripted!", "", { timeOut: 1000 }); }
+                $("#toast-container").effect("bounce");
+            }
+
+
+        },
+        error: function (error) {
+            if (localStorage.current_lang == "es") { toastr.info("Int\u00e9ntelo nuevamente, por favor"); } else { toastr.info("Try again, please"); }
+            $("#toast-container").effect("bounce");
+        }
+    });
+}
+
+      
 
 });
+
+
+
+
+
 $(window).load(function() {	
 	$(".loader").removeClass("show").addClass("hide");
 	 

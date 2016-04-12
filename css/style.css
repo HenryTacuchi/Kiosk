@@ -43,7 +43,7 @@ header .nameCompany{
 }
 header .iconOption{
 	height: 50px;
-	width: 44px;
+	width: 50px;
 }
 header .lblOption{
 	text-align: center;
@@ -129,7 +129,7 @@ footer .navbar-fixed-bottom{
     left: 0;
     bottom: -24pt;
     font-size: 14pt;
-    white-space: nowrap;
+
 }
 .areaDomain{
 	padding: 0;
@@ -183,15 +183,12 @@ footer .navbar-fixed-bottom{
 .lblStyle{
 	padding-left: 0;
 }
-.iconOption{display: inline-block; 
-    width: 40px;
-    height: 29px;
-}
+.iconOption{display: inline-block;}
 .imgIcon{
-	width: 100%;
-    height: 100%;
-    margin: 4px auto 0;
-    display: block;
+  width: 40px;
+  height: 29px;
+  margin: 4px auto 0;
+  display: block;
 }
 .imgIconShort{
 	width: 30px;
@@ -226,12 +223,35 @@ footer .navbar-fixed-bottom{
 	border: none;
 }
 
-.carousel{
-	margin-top: 4%;
-	margin-bottom: 1%;
+#splashCarousel{
+	margin: 0;
+	background-color: black;
+}
+.imgSocial {
+    padding: 0;
+    bottom: 80px;
+}
+.carousel-inner>.item{
+	-webkit-transition: all 600ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	   -moz-transition: all 600ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	     -o-transition: all 600ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	        transition: all 600ms cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+
+	-webkit-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	   -moz-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	     -o-transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+	        transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
+}
+.productsRelated div[class*="col-xs-4"] a{
+	width: 90%;
+	margin: auto;
+}
+.productsRelated div[class*="col-xs-6"] a{
+	width: 55%;
+	margin: auto;
 }
 
-.carousel-inner .active.left { left: -33%; }
+/*.carousel-inner .active.left { left: -33%; }
 .carousel-inner .next        { left:  33%; }
 .carousel-inner .prev        { left: -33%; }
 .carousel-control.left,.carousel-control.right {background-image:none;}
@@ -247,14 +267,14 @@ footer .navbar-fixed-bottom{
 }
 .right.carousel-control{
 	right: -10px;
-}
+}*/
 
 .thumbnail{
 	background-color: inherit;border:none;
 	margin-bottom: 0;
 }
 .thumbnail .caption{
-	padding: 9pt 0;
+	padding: 24pt 0;
 }
 .thumbnail  p:hover{
 	text-decoration: none;
@@ -454,6 +474,10 @@ footer .navbar-fixed-bottom{
 	float: none;
 }
 
+.btnLongDescription{
+    margin-bottom: 10px;
+}
+
 a.thumbnail,a.thumbnail:hover,a.thumbnail:focus{
 	text-decoration: none ;
 	-webkit-transition: all 0.1s;
@@ -525,6 +549,50 @@ a.thumbnail,a.thumbnail:hover,a.thumbnail:focus{
 	margin-bottom: 10%;
 }
 
+.ui-selectmenu-button span.ui-selectmenu-text,.ui-menu .ui-menu-item{
+	height: 55px;
+	line-height: 55px ;
+	font-size: 26pt !important;
+	text-align: center !important;
+}
+.ui-selectmenu-button span.ui-selectmenu-text{
+	text-align:left;padding:0.1em 2.1em 0.1em 1em;
+	display:block;
+	line-height:1.4;
+	overflow:hidden;
+}
+.ui-menu .ui-menu-item{
+	position:relative;
+	margin:0;
+	padding:3px 1em 3px .4em;
+	cursor:pointer;
+	min-height:0;
+	list-style-image:url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7")
+}
+
+.btnSubmit .coolMessage {
+    height: 55px;
+    line-height: 55px;
+    padding: 0px 10px;
+    white-space: nowrap;
+    position: absolute;
+    top: -20px;
+    right: 105%;
+    text-align: right;
+    border-radius: 8px;
+}
+.btnSubmit .coolMessage:after{
+	content: '';
+    position: absolute;
+    top: 40%;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    clear: both;
+}
+
 textarea:hover, 
 input:hover, 
 textarea:active, 
@@ -544,9 +612,6 @@ button:hover
     transform: translateY(1px);
 }
 
-.ui-selectmenu-menu .ui-menu {
-    padding-bottom: 0 !important;
-}
 .loader {
   cursor: progress;
   position: fixed;
@@ -586,7 +651,7 @@ button:hover
   height: 5px;
   border-radius: 5px;
 }
-/*.loader .circle:nth-child(2) {
+.loader .circle:nth-child(2) {
   animation-delay: 240ms;
   -webkit-animation-delay: 240ms;
 }
@@ -602,24 +667,6 @@ button:hover
   animation-delay: 960ms;
   -webkit-animation-delay: 960ms;
 }
-*/
-.loader .circle:nth-child(2) {
-  animation-delay: 50ms;
-  -webkit-animation-delay: 50ms;
-}
-.loader .circle:nth-child(3) {
-  animation-delay: 100ms;
-  -webkit-animation-delay: 100ms;
-}
-.loader .circle:nth-child(4) {
-  animation-delay: 150ms;
-  -webkit-animation-delay: 150ms;
-}
-.loader .circle:nth-child(5) {
-  animation-delay: 200ms;
-  -webkit-animation-delay: 200ms;
-}
-
 @keyframes orbit {
   0% {
     transform: rotate(225deg);
@@ -694,6 +741,39 @@ button:hover
   }
 }
 
+#splashCarousel{
+	margin: 0;
+    height: 100%;
+}
+#splashCarousel .carousel-inner{
+    height: 100%;
+}
+#splashCarousel img{
+	width: 100%;
+}
+.imgSocial {
+  bottom: 80px;
+  padding: 0;
+}
+.imgSocial img{
+	width: 100%;
+}
+
+.carouselN{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.item{
+    width: 100%;
+    height: 100%;
+}
+
+
 @media(max-width:767px){
 	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
 		font-size: 18pt;
@@ -758,29 +838,157 @@ button:hover
 	}
 }
 @media(min-width:768px){
+	#lbltitleConfig, #lbltitleChangePass,
+	#lblWelcome, #lblSizeChart, #lblSelect,
+	h2, .h2{
+		font-size: 16pt;
+	}
+	h1{
+		font-size: 17pt;
+	}
+	.shortDescription, #relatedItemsTitle {
+	    margin-top: 8pt;
+	    margin-bottom: 3px;
+	}
+	.lblStyle, .lblAvailability, .lblPrice, .lblSize, .lblStoreNo, .lblStoreName, .lblWebService, .lblRecoveryEmail, .lblPassword, .lblNewPassword, .lblNewPasswordRepeat,
+	.form-control,
+	.btn,
+	.ui-selectmenu-button span.ui-selectmenu-text, .ui-menu .ui-menu-item,
+	#toast-container *{
+		font-size: 13pt !important;
+	}
+	.btn{
+		border-radius: 5px !important;
+	}
+	.lblMessageOtherDomain{
+		font-size: 12pt;
+	}
 	.coolMessage{
-		font-size: 15pt;
+		font-size: 10pt;
+		top: -23px !important;
+		height: 40px !important;
+    	line-height: 40px !important;
+    	right: 115%;
 	}
 	.container {
-	    width: 668px;
+	    width: 540px !important;
+	}
+	.btnSubmit .coolMessage:after{
+		top: 39%;
+	    border-top: 4px solid transparent;
+    	border-bottom: 4px solid transparent;
+	}
+	.areaDomain .ui-selectmenu-button span.ui-selectmenu-text,.ui-selectmenu-button span.ui-selectmenu-text{
+	    padding: 0.4em 1em 0.4em 0.2em;
+	}
+	.input-group-btn span.lblArroba {
+		position: relative;
+	    padding: 0 5px;
+	    line-height: 16pt;
+	    font-size: 16pt;
+	    vertical-align: middle;	    
+	    top: -17px;
+	}
+	section {
+	    margin-top: 2.5%;
+	    margin-bottom: 3.5%;
+	}
+	.sectionSock{
+		margin-top: 1.5%;
+	}
+	.imgSocial {
+	    bottom: 60px;
+	}
+	.form-control,
+	.ui-selectmenu-button span.ui-selectmenu-text, .ui-menu .ui-menu-item{
+		height: 45px;
+	}
+	.ui-menu .ui-menu-item {
+	    padding: 0px 1em 3px .5em;
+	}
+	header{
+		padding-top: 0;
+	}
+	header .iconOption{
+	    height: 30px;
+    	width: 30px;
+	}
+	.imgIcon {
+	    margin-top: 6px;
+	    width: 32px;
+	    height: 22px;
+	}
+	.imgIconShort {
+	    width: 22px;
+	    height: 22px;
 	}
 	.modal-content{
 		padding: 0 10%;
 	}
 	footer .navbar-fixed-bottom{
-		height: 70px;
+		height: 60px;
+	}
+	.lblStyle, .lblAvailability, .lblPrice, .lblSize,#txtPrice, .txtStyle,.l{
+		height: 23px;
+		line-height: 23px;
+		font-size: 14pt;
+	}
+	#txtPrice{
+		font-size: 15pt;
+	    line-height: 23px;
+	}
+	.no-available,
+	.available{
+		font-size: 15pt;
 	}
 	.btnBlue {
-	    padding: 6px 5px !important;
-	    font-size: 14pt !important; 
+        padding: 3px 5px !important;
+    	font-size: 12pt !important;
 	}
 	.caption p:nth-child(3) {
-		font-size: 16pt;
+		font-size: 15pt;
 		white-space: nowrap;
+		margin-bottom: 10px;
 	}
 	header .logoCompany {
-	    height: 63px;
-	    width: 63px;
+	    height: 47px;
+	    width: 48px;
+	    background-size: cover;
+	    margin-top: 3px;
+	}
+	.headerColor .container{
+		height: 54px;
+	}
+
+	/*Sizes*/
+	.nav-tabs.nav-justified>li>a{
+		font-size: 20pt !important;
+		height: 50pt;
+		line-height: 40pt;
+	}
+	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+		font-size: 13pt;
+	}
+	#tabs-sizes{
+		height: 67px;
+	}
+
+	/*related*/
+	p{
+		font-size: 11pt;
+		line-height: 17px;
+	}
+	.relatedPrice {
+	    height: 24px;
+	    line-height: 24px;
+	}
+	.thumbnail .caption {
+	    padding: 10pt 0;
+	}
+
+	/*messages*/
+	#lblMessageResultProducts, #lblMessageNoStores, #invalidPassword {
+	    font-size: 13pt;
 	}
 
 }

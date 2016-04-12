@@ -226,7 +226,7 @@ jQuery.browser.mobile = jQuery.browser.android || jQuery.browser.blackberry || j
 				});
 
 				if (isVertical){
-					// c.css({ height:"50%"});
+					//c.css({ height:"50%"});
 					if(this.options.top=="auto") {
 						flap.css({top:150+(this.options.position=="left"?document.extruder.left:document.extruder.right)});
 						this.options.position=="left"?document.extruder.left+=labelH+this.options.flapMargin:document.extruder.right+= labelH+this.options.flapMargin;

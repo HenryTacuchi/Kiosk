@@ -8,7 +8,7 @@
     height: 27px;
 }
 .extruder .extruder-content {
-    /*overflow-y:scroll;*/
+    overflow-y:auto !important;
     display: none;
 background: rgba(1,1,1,0.99);
 /*background: -moz-linear-gradient(top, rgba(10,10,10,0.97) 0%, rgba(0,0,0,0.75) 100%);
@@ -180,7 +180,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a0a0a', end
 }
 .extruder.right .extruder-content {
    /*overflow-y: auto !important;*/
-   height: 500px ;
+   height: 500px;
 }
 .extruder.right.open .extruder-content {
     -moz-box-shadow: -2px 0 5px #999;

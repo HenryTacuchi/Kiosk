@@ -1,0 +1,51 @@
+﻿.img-responsive, .mainImage, .relatedImages{
+    background-size: 100% 100%;
+    background-position: center center;
+}
+.logoCompany{
+    width: 80px;
+    height:80px;    
+    background-size: 100% 100%;
+    background-position: center center;
+ }
+
+#homeScreen .homeScreen{
+    background-size: 100% 100%;
+}
+
+.homeScreen, .bgIndex{
+    width: 100%;
+    height:100%;
+    background-size: 100% 100%;
+    background-position: center center;
+
+}
+
+
+.ui-selectmenu-menu .ui-menu, .ui-selectmenu-open{
+   overflow-y: hidden !important;
+}
+
+.overflow{
+    overflow-y: hidden !important;
+}
+
+input::-ms-clear {
+    display: none;
+}
+
+.hideScroll{
+    display: none !important;
+}
+
+.showScroll{
+    display: block !important;
+
+}
+
+
+/*.ui-selectmenu-open{
+    position:absolute !important;
+    top:0 !important;
+    z-index: 9999999 !important;
+}*/

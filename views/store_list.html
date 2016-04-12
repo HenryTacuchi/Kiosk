@@ -1,8 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title>Kiosko.net</title>
+    <script type="text/javascript" src="../js/plugins/winstore-jscompat.js"></script>
 	<script type="text/javascript" src="../js/plugins/jquery.min.js"></script>
 	<script type="text/javascript" src="../js/plugins/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../js/scripts/scripts.js"></script>
@@ -18,6 +19,7 @@
 	<link href="../css/toastr.min.css" rel="stylesheet">
 	<link href="../css/jquery-ui.min.css" rel="stylesheet">
 	<link href="../css/jquery.mCustomScrollbar.css" rel="stylesheet"/>
+    <link href="../css/windowsstyle.css" rel="stylesheet" />
 	
 </head>
 <body  class="bg_white">
@@ -25,28 +27,29 @@
 		<div class="container">
 			<header class="row">
 				<figure class="col-xs-2">
-					<img src="" class="logoCompany">
+					<div class="logoCompany"></div>
 				</figure>
 				<div class="col-xs-7">				
 				</div>
 				<div class="col-xs-3">
 					<ol class="list-inline">
 						<li class="col-xs-6 text-center btnSubmit" id="modal-submit" role="button" data-toggle="modal" href="#modal-container-submit">
-							<div class="iconOption"> <img src="../img/iconMail.svg" width="40px" height="29px" class="imgIcon"></div>
-							<div class="lblOption"></div>		
-							<label class="coolMessage"></label>	
+							<div class="iconOption"> <img src="../img/iconMail.svg" class="imgIcon"></div>	
+							<div class="lblOption">Submit</div>		
+							<label class="coolMessage">Sign up to win something cool!</label>	
 						</li>
 						<div class="modal modal-vcenter fade" id="modal-container-submit" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
 								<div class="modal-content blueSock col-xs-6 col-xs-offset-3">
 									<div class="modal-header">
 										<h2 class="modal-title modalTitle text-center">
+											Please, write your email
 										</h2>
 									</div>
 									<div class="modal-body">
 										<div class="input-group">
 											<input type="email" class="form-control email" id="clientEmail" autocomplete="off" />
-											<span class="lblMessageOtherDomain"></span>
+											<span class="lblMessageOtherDomain">Complete your email here</span>
 	  										<span class="input-group-btn areaDomain">
 	  											<span class="lblArroba">@</span>
 	  											<select id="selectDomain">
@@ -54,23 +57,25 @@
 													<option value="hotmail.com">hotmail.com</option>
 													<option value="outlook.com">outlook.com</option>
 													<option value="gmail.com">gmail.com</option>
-													<option value="Other">Other</option>				
-												</select>
+													<option value="Other">Other</option>											
+													</select>
 	  										</span>
 										</div>									
 									</div>
 									<div class="modal-footer">																
 										<button type="button" class="btn" id="submitClientEmail">
+											Send
 										</button>
 										<button type="button" class="btn" id="cancelClientEmail">
+											Cancel
 										</button>
 									</div>
 								</div>							
 							</div>						
 						</div>
 						<li class="col-xs-6 text-center btnHome">
-							<div class="iconOption"> <img src="../img/iconHome.svg" width="40px" height="29px" class="imgIcon"></div>
-							<div class="lblOption"></div>
+							<div class="iconOption"> <img src="../img/iconHome.svg" class="imgIcon"></div>
+							<div class="lblOption">Home</div>
 						</li>
 					</ol>			
 				</div>
@@ -83,7 +88,7 @@
 			<div class="row">
 				<div class="col-xs-12s text-center">
 
-					<h1 id="lblSelect"></h1>
+					<h1 id="lblSelect">Select the Email Store to get the Store Directions</h1>
 				</div>
 			</div>	
 		</div>	
@@ -94,7 +99,7 @@
 			<div class="row">
 				<section class="row lblNoStores" style="display: none;">
 					<div class="col-xs-12 text-center">
-						<p id="lblMessageNoStores"></p>
+						<p id="lblMessageNoStores">No Stores Available</p>
 					</div>
 				</section>
 			</div>
@@ -141,31 +146,31 @@
 			<div class="modal-content blueLightSock col-xs-6 col-xs-offset-3">
 				<div class="modal-header">
 					<h2 class="modal-title modalTitle">
-						
+						Please, write your email
 					</h2>
 				</div>
 				<div class="modal-body">
 					<div class="input-group">
 						<input type="email" class="form-control email" id="clientEmailfromStore" autocomplete="off"/>
-						<span class="lblMessageOtherDomain"></span>
+						<span class="lblMessageOtherDomain">Complete your email here</span>
 						<span class="input-group-btn areaDomain">
 							<span class="lblArroba">@</span>
 							<select id="selectSendDomain">
-								<option value="yahoo.com">yahoo.com</option>
-								<option value="hotmail.com">hotmail.com</option>
-								<option value="outlook.com">outlook.com</option>
-								<option value="gmail.com">gmail.com</option>
-								<option value="Other">Other</option>										
+                                <option value="yahoo.com">yahoo.com</option>
+                                <option value="hotmail.com">hotmail.com</option>
+                                <option value="outlook.com">outlook.com</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="Other">Other</option>									
 							</select>
 						</span>
 					</div>									
 				</div>
 				<div class="modal-footer">																
 					<button type="button" class="btn" id="sendEmailfromStore">
-						
+						Send
 					</button>
 					<button type="button" class="btn" id="cancelEmailfromStore">
-						
+						Cancel
 					</button>
 				</div>
 			</div>							
@@ -178,20 +183,20 @@
 			<div class="navbar-fixed-bottom redSock">
 				<div class="col-xs-4 text-center btnReturn btn noContent" onclick="history.back(-1);">
 
-						<div class="iconOption"><img src="../img/iconReturn.svg" width="40px" height="29px" class="imgIcon"></div>
-						<div class="lblOption"></div>
+						<div class="iconOption"><img src="../img/iconReturn.svg" class="imgIcon"></div>
+						<div class="lblOption">Return</div>
 
 				</div>
 				<div class="col-xs-4 text-center btnScanProduct btn noContent" >
 
-						<div class="iconOption"><img src="../img/iconScanProduct.svg" width="40px" height="29px" class="imgIcon"></div>
-						<div class="lblOption"></div>
+						<div class="iconOption"><img src="../img/iconScanProduct.svg" class="imgIcon"></div>
+						<div class="lblOption">Scan Product</div>
 
 				</div>
 				<div class="col-xs-4 text-center btnRefresh btn noContent" onClick="window.location.reload()">
 
-						<div class="iconOption"><img src="../img/iconRefresh.svg" width="40px" height="29px" class="imgIcon"></div>
-						<div class="lblOption"></div>
+						<div class="iconOption"><img src="../img/iconRefresh.svg" class="imgIcon"></div>
+						<div class="lblOption">Refresh</div>
 
 				</div>
 			</div>			
